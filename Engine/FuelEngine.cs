@@ -4,19 +4,19 @@ namespace Engine
 {
     class FuelEngine
     {
-        public enum VehicleFuelType
+        public enum eVehicleFuelType
         {
-            Soler,
-            Octan95,
-            Octan96,
-            Octan98
+            Soler = 0,
+            Octan95 = 1,
+            Octan96 = 2,
+            Octan98 = 3
         }
 
-        private VehicleFuelType m_VehicleFuelType; 
-        private readonly float m_MaxFuelCapacity = 0;
+        private eVehicleFuelType m_VehicleFuelType; 
+        private readonly float r_MaxFuelCapacity = 0;
         private float m_CurrentFuelCapacity = 0;
 
-        public VehicleFuelType FuelType
+        public eVehicleFuelType FuelType
         {
             get
             {
@@ -24,7 +24,7 @@ namespace Engine
             }
             set
             {
-                if (System.Enum.IsDefined(typeof(VehicleFuelType), value))
+                if (System.Enum.IsDefined(typeof(eVehicleFuelType), value))
                 {
                     m_VehicleFuelType = value;
                 }
@@ -39,7 +39,7 @@ namespace Engine
         {
             get
             {
-                return m_MaxFuelCapacity;
+                return r_MaxFuelCapacity;
             }
         }
 
@@ -48,33 +48,33 @@ namespace Engine
             get { return m_CurrentFuelCapacity; }
             set
             {
-                if (value <= m_MaxFuelCapacity)
+                if (value <= r_MaxFuelCapacity)
                 {
                     m_CurrentFuelCapacity = value;
                 }
                 else
                 {
-                    throw new ValueOutOfRangeException(m_MaxFuelCapacity, 0, $"The given fuel amout exceeds the maximum range. The maximum fuel capacity is: {m_MaxFuelCapacity}.");
+                    throw new ValueOutOfRangeException(r_MaxFuelCapacity, 0, $"The given fuel amout exceeds the maximum range. The maximum fuel capacity is: {r_MaxFuelCapacity}.");
                 }
             }
         }
 
-        public FuelEngine(VehicleFuelType i_VehicleFuelType, float i_MaxFuelCapacity, float i_CurrentFuelCapacity)
+        public FuelEngine(eVehicleFuelType i_VehicleFuelType, float i_MaxFuelCapacity, float i_CurrentFuelCapacity)
         {
             m_VehicleFuelType = i_VehicleFuelType;
-            m_MaxFuelCapacity = i_MaxFuelCapacity;
+            r_MaxFuelCapacity = i_MaxFuelCapacity;
             m_CurrentFuelCapacity = i_CurrentFuelCapacity;
         }
 
-        public void Refuel(VehicleFuelType i_FuelType, float i_FuelAmoutToAdd)
+        public void Refuel(eVehicleFuelType i_FuelType, float i_FuelAmoutToAdd)
         {
             if (i_FuelType != m_VehicleFuelType)
             {
                 throw new ArgumentException("The given fuel type is invalid. This car can only be refueled with {m_CarFuelType}.");
             }
-            else if (m_CurrentFuelCapacity + i_FuelAmoutToAdd > m_MaxFuelCapacity)
+            else if (m_CurrentFuelCapacity + i_FuelAmoutToAdd > r_MaxFuelCapacity)
             {
-                throw new ValueOutOfRangeException(m_MaxFuelCapacity, 0, "The amount of fuel to add exceeds what is allowed.");
+                throw new ValueOutOfRangeException(r_MaxFuelCapacity, 0, "The amount of fuel to add exceeds what is allowed.");
             }
             else
             {

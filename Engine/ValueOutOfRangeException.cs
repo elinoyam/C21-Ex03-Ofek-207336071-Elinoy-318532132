@@ -16,15 +16,15 @@ namespace Engine
         {
         }
 
-        public ValueOutOfRangeException(string message) : base(message)
+        public ValueOutOfRangeException(string i_Message) : base(i_Message)
         {
         }
 
-        public ValueOutOfRangeException(string message, Exception inner) : base(message, inner)
+        public ValueOutOfRangeException(string i_Message, Exception i_Inner) : base(i_Message, i_Inner)
         {
         }
 
-        public ValueOutOfRangeException(float i_MaxValue, float i_MinValue, string message) : base(message)
+        public ValueOutOfRangeException(float i_MaxValue, float i_MinValue, string i_Message) : base(i_Message)
         {
             m_MaxValue = i_MaxValue;
             m_MinValue = i_MinValue;

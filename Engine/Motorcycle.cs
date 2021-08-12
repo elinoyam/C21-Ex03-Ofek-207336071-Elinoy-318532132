@@ -5,15 +5,15 @@ namespace Engine
 {
     class Motorcycle : Vehicle
     {
-        private MotorcycleLicenseType m_LicenseType;                                                                                                                                      
+        private eMotorcycleLicenseType m_LicenseType;                                                                                                                                      
         private int m_EngineCapacity;
 
-        public MotorcycleLicenseType LicenseType
+        public eMotorcycleLicenseType LicenseType
         {
             get { return m_LicenseType; }
             set
             {
-                if (System.Enum.IsDefined(typeof(MotorcycleLicenseType), value))
+                if (System.Enum.IsDefined(typeof(eMotorcycleLicenseType), value))
                 {
                     m_LicenseType = value;
                 }
@@ -29,15 +29,15 @@ namespace Engine
             get { return m_EngineCapacity; }
         }
 
-        public enum MotorcycleLicenseType //TODO maybe protected?
+        public enum eMotorcycleLicenseType //TODO maybe protected?
         {
             A,
             B1,
-            AA,
-            BB
+            Aa,
+            Bb
         }
 
-        public Motorcycle(string i_ModelName, string i_LicenseNumber, float i_EnergyMeter, List<Tire> i_listOfTires, MotorcycleLicenseType i_LicenseType, int i_EngineCapacity) : base(i_ModelName, i_LicenseNumber, i_EnergyMeter, i_listOfTires)
+        public Motorcycle(string i_ModelName, string i_LicenseNumber, float i_EnergyMeter, List<Tire> i_ListOfTires, eMotorcycleLicenseType i_LicenseType, int i_EngineCapacity) : base(i_ModelName, i_LicenseNumber, i_EnergyMeter, i_ListOfTires)
         {
             m_LicenseType = i_LicenseType;
             m_EngineCapacity = i_EngineCapacity;

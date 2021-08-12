@@ -5,15 +5,15 @@ namespace Engine
 {
     class Car : Vehicle
     {
-        private CarColor m_CarColor;
+        private eCarColor m_CarColor;
         private int m_NumberOfDoors = 2;
 
-        public CarColor Color
+        public eCarColor Color
         {
             get { return m_CarColor; }
             set
             {
-                if (System.Enum.IsDefined(typeof(CarColor), value))
+                if (System.Enum.IsDefined(typeof(eCarColor), value))
                 {
                     m_CarColor = value;
                 }
@@ -40,15 +40,15 @@ namespace Engine
             }
         }
 
-        public enum CarColor
+        public enum eCarColor
         {
-            RED,
-            SILVER,
-            WHITE,
-            BLACK
+            Red,
+            Silver,
+            White,
+            Black
         }
 
-        public Car(string i_ModelName, string i_LicenseNumber, float i_EnergyMeter, List<Tire> i_listOfTires, CarColor i_CarColor, int i_NumberOfDoors) : base(i_ModelName, i_LicenseNumber, i_EnergyMeter, i_listOfTires)
+        public Car(string i_ModelName, string i_LicenseNumber, float i_EnergyMeter, List<Tire> i_ListOfTires, eCarColor i_CarColor, int i_NumberOfDoors) : base(i_ModelName, i_LicenseNumber, i_EnergyMeter, i_ListOfTires)
         {
             m_CarColor = i_CarColor;
             m_NumberOfDoors = i_NumberOfDoors;
