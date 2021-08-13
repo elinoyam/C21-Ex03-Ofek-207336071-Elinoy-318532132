@@ -2,7 +2,7 @@
 
 namespace Engine
 {
-    class Tire
+    public class Tire
     {
         private readonly string r_ManufactorName;
         private float m_CurrentAirPressure = 0;

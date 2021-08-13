@@ -26,5 +26,12 @@ namespace Engine
         {
             r_MotorcycleEngine = i_ElectricEngine;
         }
+
+        public override string ToString()
+        {
+            return $"This is a {ModelName} electric mototrcycle with {LicenseNumber} license plate. " +
+                $" The {ListOfTires.Count} {ListOfTires[0].ManufactorName} tires filled with {ListOfTires[0].CurrentAirPressure} air pressure. " +
+                $"The battery status is: {MotorcycleEngine.BatteryTimeRemainingInHours}. ";
+        }
     }
 }

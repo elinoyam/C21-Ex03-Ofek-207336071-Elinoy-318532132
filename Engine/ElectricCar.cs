@@ -28,5 +28,18 @@ namespace Engine
         {
             r_CarEngine = i_ElectricEngine;
         }
+        
+
+        public void Refuel(float i_MinutesToCharge)
+        {
+            r_CarEngine.Refuel(i_MinutesToCharge);
+        }
+
+        public override string ToString()
+        {
+            return $"This is a {ModelName} electric car with {LicenseNumber} license plate. " +
+                $" The {ListOfTires.Count} {ListOfTires[0].ManufactorName} tires filled with {ListOfTires[0].CurrentAirPressure} air pressure. " +
+                $"The battery status is: {CarEngine.BatteryTimeRemainingInHours}. ";
+        }
     }
 }

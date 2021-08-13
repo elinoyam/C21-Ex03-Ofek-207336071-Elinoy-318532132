@@ -26,5 +26,12 @@ namespace Engine
         {
             r_MotorcycleEngine = i_FuelEngine;
         }
+
+        public override string ToString()
+        {
+            return $"This is a {ModelName} fuel motorcycle with {LicenseNumber} license plate. " +
+                $" The {ListOfTires.Count} {ListOfTires[0].ManufactorName} tires filled with {ListOfTires[0].CurrentAirPressure} air pressure. " +
+                $"The {MotorcycleEngine.FuelType} fuel status is: {MotorcycleEngine.CurrentFuelCapacity}. ";
+        }
     }
 }

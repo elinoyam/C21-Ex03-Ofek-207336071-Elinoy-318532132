@@ -7,7 +7,12 @@ namespace Engine
     {
         private readonly bool r_IsCarryingDangerousMaterials;
         private readonly float r_MaxCarryingWeight;
+        private readonly FuelEngine r_TruckfuelEngine;
 
+        public FuelEngine TruckEngine
+        {
+            get { return r_TruckfuelEngine; }
+        }
         public bool IsCarryingDangerousMaterials
         {
             get { return r_IsCarryingDangerousMaterials; }
@@ -24,5 +29,11 @@ namespace Engine
             r_MaxCarryingWeight = i_MaxCarryingWeight;
         }
 
+        public override string ToString()
+        {
+            return $"This is a {ModelName} fuel car with {LicenseNumber} license plate. " +
+                $" The {ListOfTires.Count} {ListOfTires[0].ManufactorName} tires filled with {ListOfTires[0].CurrentAirPressure} air pressure. " +
+                $"The {TruckEngine.FuelType} fuel status is: {TruckEngine.CurrentFuelCapacity}. ";
+        }
     }
 }

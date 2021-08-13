@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Engine
 {
-    class Vehicle
+    public abstract class Vehicle
     {
         private readonly string r_ModelName; //TODO read only r_blabla
         private readonly string r_LicenseNumber; 
@@ -38,6 +38,24 @@ namespace Engine
         {
             get { return m_ListOfTires; }
             // TODO do we need set?
+        }
+
+        public override int GetHashCode()
+        {
+            return LicenseNumber.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            bool isEqual = false;
+
+            Vehicle vehicle = obj as Vehicle;
+            if(vehicle != null)
+            {
+                isEqual = this.LicenseNumber == vehicle.LicenseNumber;
+            }
+
+            return base.Equals(obj);
         }
     }
 }
