@@ -11,6 +11,14 @@ namespace Engine
             get { return r_MotorcycleEngine; }
         }
 
+        public FuelMotorcycle(List<string> i_CommonVehicleInfo,
+                              List<object> i_CommonTypeOfVehicleInfo, List<object> i_SpecificTypeOfVehicleInfo)
+                            : base (i_CommonVehicleInfo, i_CommonTypeOfVehicleInfo)
+        {
+            // i_SpecificTypeOfVehicleInfo - 0- 1-
+        }
+
+
         public FuelMotorcycle(string i_ModelName, string i_LicenseNumber, float i_EnergyMeter, List<Tire> i_ListOfTires, 
                               eMotorcycleLicenseType i_LicenseType, int i_EngineCapacity,
                               FuelEngine.eVehicleFuelType i_MotorcycleFuelType, float i_MaxFuelCapacity, float i_CurrentFuelCapacity) 
@@ -30,7 +38,7 @@ namespace Engine
         public override string ToString()
         {
             return $"This is a {ModelName} fuel motorcycle with {LicenseNumber} license plate. " +
-                $" The {ListOfTires.Count} {ListOfTires[0].ManufactorName} tires filled with {ListOfTires[0].CurrentAirPressure} air pressure. " +
+                $" The {ListOfTires.Count} {ListOfTires[0].ManufactureName} tires filled with {ListOfTires[0].CurrentAirPressure} air pressure. " +
                 $"The {MotorcycleEngine.FuelType} fuel status is: {MotorcycleEngine.CurrentFuelCapacity}. ";
         }
     }

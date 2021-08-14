@@ -38,7 +38,7 @@ namespace Engine
         public override string ToString()
         {
             return $"This is a {ModelName} electric car with {LicenseNumber} license plate. " +
-                $" The {ListOfTires.Count} {ListOfTires[0].ManufactorName} tires filled with {ListOfTires[0].CurrentAirPressure} air pressure. " +
+                $" The {ListOfTires.Count} {ListOfTires[0].ManufactureName} tires filled with {ListOfTires[0].CurrentAirPressure} air pressure. " +
                 $"The battery status is: {CarEngine.BatteryTimeRemainingInHours}. ";
         }
     }

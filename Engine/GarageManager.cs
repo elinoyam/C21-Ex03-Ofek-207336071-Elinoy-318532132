@@ -16,16 +16,25 @@ namespace Engine
 
         private Dictionary<string, GarageCard> m_VehiclesInGarage;
 
-        /*public bool InsertNewVehicleToGarage(eAvailableTypesOfVehicles i_VehicleTypeToEnter, string i_OwnerName, string ownerPhoneNumber, string i_ModuleName, string i_LicesncePlateNumber)
+        public bool InsertNewVehicleToGarage(eAvailableTypesOfVehicles i_VehicleType, List<string> i_OwnerVehicleInfo,
+                                             List<string> i_CommonVehicleInfo, List<object> i_CommonTypeOfVehicleInfo, List<object> i_SpecificTypeOfVehicleInfo)
         {
-            switch()
-            {
-                case:
+            Vehicle newVehicle = VehicleFactory.CreateNewVehicle(i_VehicleType, i_CommonVehicleInfo,
+                i_CommonTypeOfVehicleInfo, i_SpecificTypeOfVehicleInfo);
+
+            // create garage card
+            GarageCard newVehicleCard = new GarageCard(i_OwnerVehicleInfo, newVehicle); //TODO
+            //license = i_CommonVehicleInfo[0]
+            m_VehiclesInGarage.Add(i_CommonVehicleInfo[0], newVehicleCard);
 
 
-            }
-            Vehicle newVehicle = new ()
-        }*/
+            return true; //TODO delete after implement
+        }
+
+        public bool IsVehicleInGarage(string licenseNumber)
+        {
+            return m_VehiclesInGarage.ContainsKey(licenseNumber);
+        }
 
         public List<string> GetLicensePlateInGarage()
         {

@@ -14,7 +14,7 @@ namespace Engine
         private readonly string r_OwnerName;
         private readonly string r_OwnerPhoneNumber;
         private eVehicleState m_VehicleCurrentState;
-        private Vehicle m_OwnerVehicle;
+        private Vehicle m_OwnerVehicle; //TODO pointer to vehicle
         
         public string OwnerName
         {

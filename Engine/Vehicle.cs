@@ -5,10 +5,40 @@ namespace Engine
 {
     public abstract class Vehicle
     {
-        private readonly string r_ModelName; //TODO read only r_blabla
+        private readonly string r_ModelName; 
         private readonly string r_LicenseNumber; 
         private float m_EnergyMeter = 0;
         private List<Tire> m_ListOfTires;
+        
+        public Vehicle(List<string> i_CommonVehicleInfo) // 0-licenseNumber, 1- ModelName , 2- m_EnergyMeter , tires: 3- manufactureName, 4- current air pressure , 5- max air pressure
+        {
+            r_LicenseNumber = i_CommonVehicleInfo[0];
+            r_ModelName = i_CommonVehicleInfo[1];
+            bool goodInput;
+            string stringEnergyMeter = i_CommonVehicleInfo[2];
+            goodInput = float.TryParse(stringEnergyMeter, out m_EnergyMeter); //TODO do it with try and catch - this is a tester for good input
+
+            //tires: 3- manufactureName, 4- current air pressure , 5- max air pressure
+            string manufactureName = i_CommonVehicleInfo[3]; //TODO think of better names
+            string stringCurrentAirPressure = i_CommonVehicleInfo[4];
+            string stringMaxAirPressure = i_CommonVehicleInfo[5];
+
+            float currentAirPressure, maxAirPressure;
+            goodInput = float.TryParse(stringCurrentAirPressure, out currentAirPressure); //TODO do it with try and catch - this is a tester for good input
+            goodInput = float.TryParse(stringMaxAirPressure, out maxAirPressure); //TODO do it with try and catch - this is a tester for good input
+
+            m_ListOfTires = new List<Tire>();
+            Tire tire = new Tire(manufactureName, currentAirPressure, maxAirPressure);
+
+            string stringAmountOfTires = i_CommonVehicleInfo[6];
+            int amountOfTires;
+            goodInput = int.TryParse(stringAmountOfTires, out amountOfTires); //TODO do it with try and catch - this is a tester for good input
+
+            for(int i = 0; i < amountOfTires; i++)
+            {
+                m_ListOfTires.Add(tire); //TODO very important add to the function amout of 
+            }
+        }
 
         public Vehicle(string i_ModelName, string i_LicenseNumber, float i_EnergyMeter, List<Tire> i_ListOfTires)
         {
