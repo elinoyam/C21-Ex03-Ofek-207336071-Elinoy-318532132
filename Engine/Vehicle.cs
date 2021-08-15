@@ -7,16 +7,16 @@ namespace Engine
     {
         private readonly string r_ModelName; 
         private readonly string r_LicenseNumber; 
-        private float m_EnergyMeter = 0;
+        private float m_EnergyPercentageMeter = 0;
         private List<Tire> m_ListOfTires;
         
-        public Vehicle(List<string> i_CommonVehicleInfo) // 0-licenseNumber, 1- ModelName , 2- m_EnergyMeter , tires: 3- manufactureName, 4- current air pressure , 5- max air pressure
+        public Vehicle(List<string> i_CommonVehicleInfo) // 0-licenseNumber, 1- ModelName , 2- m_EnergyPercentageMeter , tires: 3- manufactureName, 4- current air pressure , 5- max air pressure
         {
-            r_LicenseNumber = i_CommonVehicleInfo[0];
+           /* r_LicenseNumber = i_CommonVehicleInfo[0];
             r_ModelName = i_CommonVehicleInfo[1];
             bool goodInput;
             string stringEnergyMeter = i_CommonVehicleInfo[2];
-            goodInput = float.TryParse(stringEnergyMeter, out m_EnergyMeter); //TODO do it with try and catch - this is a tester for good input
+            goodInput = float.TryParse(stringEnergyMeter, out m_EnergyPercentageMeter); //TODO do it with try and catch - this is a tester for good input
 
             //tires: 3- manufactureName, 4- current air pressure , 5- max air pressure
             string manufactureName = i_CommonVehicleInfo[3]; //TODO think of better names
@@ -37,14 +37,14 @@ namespace Engine
             for(int i = 0; i < amountOfTires; i++)
             {
                 m_ListOfTires.Add(tire); //TODO very important add to the function amout of 
-            }
+            }*/
         }
 
-        public Vehicle(string i_ModelName, string i_LicenseNumber, float i_EnergyMeter, List<Tire> i_ListOfTires)
+        public Vehicle(string i_ModelName, string i_LicenseNumber, float i_EnergyPercentageMeter, List<Tire> i_ListOfTires)
         {
             r_ModelName = i_ModelName;
             r_LicenseNumber = i_LicenseNumber;
-            m_EnergyMeter = i_EnergyMeter;
+            m_EnergyPercentageMeter = i_EnergyPercentageMeter;
             m_ListOfTires = i_ListOfTires; // TODO check if I can get list in ctor..
         }
 
@@ -58,10 +58,10 @@ namespace Engine
             get { return r_LicenseNumber; }
         }
 
-        public float EnergyMeter
+        public float EnergyPercentageMeter
         {
-            get { return m_EnergyMeter; }
-            set { m_EnergyMeter = value; }
+            get { return m_EnergyPercentageMeter; }
+            set { m_EnergyPercentageMeter = value; }
         }
 
         public List<Tire> ListOfTires

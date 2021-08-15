@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Engine
 {
-    class Car : Vehicle
+    public class Car : Vehicle
     {
         private eCarColor m_CarColor;
         private int m_NumberOfDoors = 2;
@@ -48,7 +48,7 @@ namespace Engine
             Black
         }
 
-        public Car(string i_ModelName, string i_LicenseNumber, float i_EnergyMeter, List<Tire> i_ListOfTires, eCarColor i_CarColor, int i_NumberOfDoors) : base(i_ModelName, i_LicenseNumber, i_EnergyMeter, i_ListOfTires)
+        public Car(string i_ModelName, string i_LicenseNumber, float i_EnergyPercentageMeter, List<Tire> i_ListOfTires, eCarColor i_CarColor, int i_NumberOfDoors) : base(i_ModelName, i_LicenseNumber, i_EnergyPercentageMeter, i_ListOfTires)
         {
             m_CarColor = i_CarColor;
             m_NumberOfDoors = i_NumberOfDoors;

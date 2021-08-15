@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using static Engine.FuelEngine;
 
 namespace Engine
 {
-    class Truck : Vehicle
+    public class Truck : Vehicle
     {
         private readonly bool r_IsCarryingDangerousMaterials;
         private readonly float r_MaxCarryingWeight;
@@ -23,10 +24,18 @@ namespace Engine
             get { return r_MaxCarryingWeight; }
         }
 
-        public Truck(string i_ModelName, string i_LicenseNumber, float i_EnergyMeter, List<Tire> i_ListOfTires, bool i_DrivesDangerousMaterials, int i_MaxCarryingWeight) : base(i_ModelName, i_LicenseNumber, i_EnergyMeter, i_ListOfTires)
+        public Truck(string i_ModelName, string i_LicenseNumber, float i_EnergyPercentageMeter, List<Tire> i_ListOfTires, bool i_DrivesDangerousMaterials, float i_MaxCarryingWeight, eVehicleFuelType i_VehicleFuelType, float i_MaxFuelCapacity, float i_CurrentFuelCapacity) : base(i_ModelName, i_LicenseNumber, i_EnergyPercentageMeter, i_ListOfTires)
         {
             r_IsCarryingDangerousMaterials = i_DrivesDangerousMaterials;
             r_MaxCarryingWeight = i_MaxCarryingWeight;
+            r_TruckfuelEngine = new FuelEngine(i_VehicleFuelType, i_MaxFuelCapacity, i_CurrentFuelCapacity);
+        }
+
+        public Truck(string i_ModelName, string i_LicenseNumber, float i_EnergyPercentageMeter, List<Tire> i_ListOfTires, bool i_DrivesDangerousMaterials, float i_MaxCarryingWeight, FuelEngine i_FuelEngine) : base(i_ModelName, i_LicenseNumber, i_EnergyPercentageMeter, i_ListOfTires)
+        {
+            r_IsCarryingDangerousMaterials = i_DrivesDangerousMaterials;
+            r_MaxCarryingWeight = i_MaxCarryingWeight;
+            r_TruckfuelEngine = i_FuelEngine;
         }
 
         public override string ToString()

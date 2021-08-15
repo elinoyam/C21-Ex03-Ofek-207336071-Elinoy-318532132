@@ -2,7 +2,7 @@
 
 namespace Engine
 {
-    class ElectricEngine
+    public class ElectricEngine
     {
         private readonly float r_MaxBatteryTimeInHours;
         private float m_BatteryTimeRemainingInHours;

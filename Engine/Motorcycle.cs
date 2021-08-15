@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Engine
 {
-    class Motorcycle : Vehicle
+    public class Motorcycle : Vehicle
     {
         private eMotorcycleLicenseType m_LicenseType;                                                                                                                                      
         private int m_EngineCapacity;
@@ -41,13 +41,13 @@ namespace Engine
                      : base(i_CommonVehicleInfo)
         {
             //TODO add exceptions
-            m_LicenseType = (eMotorcycleLicenseType)i_CommonTypeOfVehicleInfo[0];                                                                                                                                      
-            m_EngineCapacity = (int)i_CommonTypeOfVehicleInfo[1];
+           /* m_LicenseType = (eMotorcycleLicenseType)i_CommonTypeOfVehicleInfo[0];                                                                                                                                      
+            m_EngineCapacity = (int)i_CommonTypeOfVehicleInfo[1];*/
         }
 
 
        
-        public Motorcycle(string i_ModelName, string i_LicenseNumber, float i_EnergyMeter, List<Tire> i_ListOfTires, eMotorcycleLicenseType i_LicenseType, int i_EngineCapacity) : base(i_ModelName, i_LicenseNumber, i_EnergyMeter, i_ListOfTires)
+        public Motorcycle(string i_ModelName, string i_LicenseNumber, float i_EnergyPercentageMeter, List<Tire> i_ListOfTires, eMotorcycleLicenseType i_LicenseType, int i_EngineCapacity) : base(i_ModelName, i_LicenseNumber, i_EnergyPercentageMeter, i_ListOfTires)
         {
             m_LicenseType = i_LicenseType;
             m_EngineCapacity = i_EngineCapacity;

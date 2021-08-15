@@ -14,7 +14,14 @@ namespace Engine
             Truck
         }
 
-        private Dictionary<string, GarageCard> m_VehiclesInGarage;
+        private Dictionary<string, GarageCard> m_VehiclesInGarage = new Dictionary<string, GarageCard>();
+
+
+        //public GarageManager()
+        //{
+        //    m_VehiclesInGarage = new Dictionary<string, GarageCard>();
+        //}
+
 
         public bool InsertNewVehicleToGarage(eAvailableTypesOfVehicles i_VehicleType, List<string> i_OwnerVehicleInfo,
                                              List<string> i_CommonVehicleInfo, List<object> i_CommonTypeOfVehicleInfo, List<object> i_SpecificTypeOfVehicleInfo)
@@ -23,7 +30,7 @@ namespace Engine
                 i_CommonTypeOfVehicleInfo, i_SpecificTypeOfVehicleInfo);
 
             // create garage card
-            GarageCard newVehicleCard = new GarageCard(i_OwnerVehicleInfo, newVehicle); //TODO
+            GarageCard newVehicleCard = new GarageCard(i_OwnerVehicleInfo, newVehicle); 
             //license = i_CommonVehicleInfo[0]
             m_VehiclesInGarage.Add(i_CommonVehicleInfo[0], newVehicleCard);
 

@@ -2,11 +2,11 @@
 
 namespace Engine
 {
-    public class Tire
+    public struct Tire
     {
         private readonly string r_ManufactureName;
-        private float m_CurrentAirPressure = 0;
-        private readonly float r_MaxAirPressureByManufacture = 0;
+        private float m_CurrentAirPressure;
+        private readonly float r_MaxAirPressureByManufacture;
 
         public string ManufactureName
         {

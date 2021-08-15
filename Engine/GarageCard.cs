@@ -38,6 +38,14 @@ namespace Engine
             set { m_OwnerVehicle = value; }
         }
 
+        public GarageCard(List<string> i_OwnerVehicleInfo, Vehicle i_VehiclePointer)
+        {
+            r_OwnerName = i_OwnerVehicleInfo[0];
+            r_OwnerPhoneNumber = i_OwnerVehicleInfo[1];
+            m_VehicleCurrentState = eVehicleState.InRepair;
+            m_OwnerVehicle = i_VehiclePointer;
+        }
+
         public GarageCard(string i_OwnerName, string i_OwnerPhoneNumber, eVehicleState i_VehicleCurrentState)
         {
             r_OwnerName = i_OwnerName;
