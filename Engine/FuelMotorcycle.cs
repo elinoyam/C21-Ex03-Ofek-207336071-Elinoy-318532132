@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Engine
 {
-    public class FuelMotorcycle : Motorcycle
+    public class FuelMotorcycle : Motorcycle, Refuelable
     {
         private readonly FuelEngine r_MotorcycleEngine;
         public FuelEngine MotorcycleEngine
@@ -11,6 +11,10 @@ namespace Engine
             get { return r_MotorcycleEngine; }
         }
 
+        public FuelMotorcycle(string i_LicenseNumber, int i_NumberOfTires, float i_TiresMaxAirPressure) : base(i_LicenseNumber, i_NumberOfTires, i_TiresMaxAirPressure)
+        {
+            r_MotorcycleEngine = new FuelEngine(FuelEngine.eVehicleFuelType.Octan98, 6, 0);
+        }
         public FuelMotorcycle(List<string> i_CommonVehicleInfo,
                               List<object> i_CommonTypeOfVehicleInfo, List<object> i_SpecificTypeOfVehicleInfo)
                             : base (i_CommonVehicleInfo, i_CommonTypeOfVehicleInfo)
@@ -40,6 +44,10 @@ namespace Engine
             return $"This is a {ModelName} fuel motorcycle with {LicenseNumber} license plate. " +
                 $" The {ListOfTires.Count} {ListOfTires[0].ManufactureName} tires filled with {ListOfTires[0].CurrentAirPressure} air pressure. " +
                 $"The {MotorcycleEngine.FuelType} fuel status is: {MotorcycleEngine.CurrentFuelCapacity}. ";
+        }
+        public void Refuel(FuelEngine.eVehicleFuelType i_FuelType, float i_AmountToFill)
+        {
+            r_MotorcycleEngine.Refuel(i_FuelType, i_AmountToFill);
         }
     }
 }

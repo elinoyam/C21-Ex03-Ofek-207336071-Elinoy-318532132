@@ -5,10 +5,10 @@ namespace Engine
 {
     public abstract class Vehicle
     {
-        private readonly string r_ModelName; 
+        private /*readonly*/ string r_ModelName;
         private readonly string r_LicenseNumber; 
         private float m_EnergyPercentageMeter = 0;
-        private List<Tire> m_ListOfTires;
+        private readonly List<Tire> r_ListOfTires;
         
         public Vehicle(List<string> i_CommonVehicleInfo) // 0-licenseNumber, 1- ModelName , 2- m_EnergyPercentageMeter , tires: 3- manufactureName, 4- current air pressure , 5- max air pressure
         {
@@ -40,12 +40,22 @@ namespace Engine
             }*/
         }
 
+        public Vehicle(string i_LicenseNumber, int i_NumberOfTires, float i_TiresMaxAirPressure)
+        {
+            r_LicenseNumber = i_LicenseNumber;
+            r_ListOfTires = new List<Tire>(i_NumberOfTires);
+            for(int i = 0; i < i_NumberOfTires; ++i)
+            {
+                r_ListOfTires.Add(new Tire(i_TiresMaxAirPressure));
+            }
+        }
+
         public Vehicle(string i_ModelName, string i_LicenseNumber, float i_EnergyPercentageMeter, List<Tire> i_ListOfTires)
         {
             r_ModelName = i_ModelName;
             r_LicenseNumber = i_LicenseNumber;
             m_EnergyPercentageMeter = i_EnergyPercentageMeter;
-            m_ListOfTires = i_ListOfTires; // TODO check if I can get list in ctor..
+            r_ListOfTires = i_ListOfTires; // TODO check if I can get list in ctor..
         }
 
         public string ModelName
@@ -66,7 +76,7 @@ namespace Engine
 
         public List<Tire> ListOfTires
         {
-            get { return m_ListOfTires; }
+            get { return r_ListOfTires; }
             // TODO do we need set?
         }
 

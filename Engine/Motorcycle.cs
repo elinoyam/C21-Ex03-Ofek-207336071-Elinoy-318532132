@@ -37,6 +37,9 @@ namespace Engine
             Bb
         }
 
+        public Motorcycle(string i_LicenseNumber, int i_NumberOfTires, float i_TiresMaxAirPressure) :base(i_LicenseNumber, i_NumberOfTires, i_TiresMaxAirPressure)
+        {
+        }
         public Motorcycle(List<string> i_CommonVehicleInfo, List<object> i_CommonTypeOfVehicleInfo)
                      : base(i_CommonVehicleInfo)
         {

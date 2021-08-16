@@ -33,7 +33,7 @@ namespace Engine
             GarageCard newVehicleCard = new GarageCard(i_OwnerVehicleInfo, newVehicle); 
             //license = i_CommonVehicleInfo[0]
             m_VehiclesInGarage.Add(i_CommonVehicleInfo[0], newVehicleCard);
-
+            
 
             return true; //TODO delete after implement
         }
@@ -87,15 +87,14 @@ namespace Engine
 
         public void ChargeElectricVehicle(string i_LicensePlate, float i_MinutesToCharge)
         {
-            Vehicle vehicle = m_VehiclesInGarage[i_LicensePlate].OwnerVehicle;
-            // vehicle - abstract method?
-
+            Rechargable vehicle = m_VehiclesInGarage[i_LicensePlate].OwnerVehicle as Rechargable;
+            vehicle.ReCharge(i_MinutesToCharge);
         }
 
         public void RefuelFuelVehicle(string i_LicensePlate, FuelEngine.eVehicleFuelType i_FuelType, float i_AmountToFill)
         {
-            Vehicle vehicle = m_VehiclesInGarage[i_LicensePlate].OwnerVehicle;
-            // vehicle - abstract method?
+            Refuelable vehicle = m_VehiclesInGarage[i_LicensePlate].OwnerVehicle as Refuelable;
+            vehicle.Refuel(i_FuelType, i_AmountToFill);
         }
 
         public string GetVehicleDetails(string i_LicensePlate)
@@ -104,5 +103,10 @@ namespace Engine
 
             return vehicle.ToString();
         }
+
+        //public Vehicle GetVehicle(string i_LicensePlate)      // TODO: I don't know if we need this method
+        //{
+        //    return m_VehiclesInGarage[i_LicensePlate].OwnerVehicle;
+        //}
     }
 }

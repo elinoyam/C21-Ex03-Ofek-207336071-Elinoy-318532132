@@ -175,6 +175,33 @@ namespace Ex03.ConsoleUI
                         }
 
                         break;
+                    case 5:
+                        float amountToRefuel;
+                        FuelEngine.eVehicleFuelType fuelType;
+
+                        Console.WriteLine("Enter license plate number:");
+                        licenseNumber = Console.ReadLine();
+                        Console.WriteLine("Enter the hours to charge:");
+                        inputFromUser = Console.ReadLine();
+                        goodInput = float.TryParse(inputFromUser, out amountToRefuel);
+                        Console.WriteLine("Enter the type of fuel:");
+                        inputFromUser = Console.ReadLine();
+                        goodInput = FuelEngine.eVehicleFuelType.TryParse(inputFromUser, out fuelType);
+                        break;
+                    case 6:
+                        float amountToAdd;
+
+                        Console.WriteLine("Enter license plate number:");
+                        licenseNumber=Console.ReadLine();
+                        Console.WriteLine("Enter the hours to charge:");
+                        inputFromUser = Console.ReadLine();
+                        goodInput = float.TryParse(inputFromUser, out amountToAdd);
+                        if (goodInput)
+                        {
+                           garageManager.ChargeElectricVehicle(licenseNumber, amountToAdd);
+                        }
+                        break;
+
 
                     default:
                         break;

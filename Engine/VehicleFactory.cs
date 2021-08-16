@@ -8,6 +8,35 @@ namespace Engine
 {
     public class VehicleFactory
     {
+        public Vehicle MakeNewVehicle(eAvailableTypesOfVehicles i_VehicleType, string i_LicenseNumber)
+        {
+            Vehicle vehicle;
+
+            switch (i_VehicleType)
+            {
+                case eAvailableTypesOfVehicles.ElectricCar:
+                    vehicle = new ElectricCar(i_LicenseNumber,4,32);
+                    break;
+                case eAvailableTypesOfVehicles.FuelCar:
+                    vehicle = new FuelCar(i_LicenseNumber, 4,32);
+                    break;
+                case eAvailableTypesOfVehicles.ElectricMotorcycle:
+                    vehicle = new ElectricMotorcycle(i_LicenseNumber,2,30);
+                    break;
+                case eAvailableTypesOfVehicles.FuelMotorcycle:
+                    vehicle = new FuelMotorcycle(i_LicenseNumber, 2,30);
+                    break;
+                case eAvailableTypesOfVehicles.Truck:
+                    vehicle = new Truck(i_LicenseNumber, 16,26);
+                    break;
+                default:
+                    vehicle = null;
+                    break;
+            }
+
+            return vehicle;
+        }
+
         public static Vehicle CreateNewVehicle(eAvailableTypesOfVehicles i_VehicleType, List<string> i_CommonVehicleInfo, 
                                                List<object> i_CommonTypeOfVehicleInfo, List<object> i_SpecificTypeOfVehicleInfo)
         {
@@ -209,11 +238,8 @@ namespace Engine
 
         private static void getTruckDetails(List<object> i_CommonTypeOfVehicleInfo, out bool o_IsCarryingDangerousMaterials, out float o_MaxCarryWeight)
         {
-            //o_LicenseType = (Motorcycle.eMotorcycleLicenseType) i_CommonTypeOfVehicleInfo[0];
-            bool isGood = bool.TryParse((string)i_CommonTypeOfVehicleInfo[0], out o_IsCarryingDangerousMaterials);
-            bool toPrase = (string)i_CommonTypeOfVehicleInfo[1] == 'Y';
-
-            isGood = float.TryParse(toPrase, out o_MaxCarryWeight);
+            bool isGood = bool.TryParse(((string)i_CommonTypeOfVehicleInfo[0]).ToUpper().Equals('Y').ToString(), out o_IsCarryingDangerousMaterials);
+            isGood = float.TryParse((string)i_CommonTypeOfVehicleInfo[1], out o_MaxCarryWeight);
             if (!isGood)
             {
                 throw new FormatException("Number of doors needs to be a int number");

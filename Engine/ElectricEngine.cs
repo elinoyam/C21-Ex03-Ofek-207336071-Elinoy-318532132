@@ -2,7 +2,7 @@
 
 namespace Engine
 {
-    public class ElectricEngine
+    public class ElectricEngine : Engine
     {
         private readonly float r_MaxBatteryTimeInHours;
         private float m_BatteryTimeRemainingInHours;
@@ -38,7 +38,7 @@ namespace Engine
             m_BatteryTimeRemainingInHours = i_BatteryTimeRemainingInHours;
         }
 
-        public void Refuel(float i_AmoutOfHoursToAdd)
+        public void Recharge (float i_AmoutOfHoursToAdd)
         {
             if (m_BatteryTimeRemainingInHours + i_AmoutOfHoursToAdd > r_MaxBatteryTimeInHours)
             {

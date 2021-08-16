@@ -3,13 +3,18 @@ using System.Collections.Generic;
 
 namespace Engine
 {
-    public class FuelCar : Car
+    public class FuelCar : Car, Refuelable
     {
         private readonly FuelEngine r_CarEngine;
 
         public FuelEngine CarEngine
         {
             get { return r_CarEngine; }
+        }
+
+        public FuelCar(string i_LicenseNumber, int i_NumberOfTires, float i_TiresMaxAirPressure) : base(i_LicenseNumber, i_NumberOfTires, i_TiresMaxAirPressure)
+        {
+            r_CarEngine = new FuelEngine(FuelEngine.eVehicleFuelType.Octan95, 45, 0);
         }
 
         public FuelCar(string i_ModelName, string i_LicenseNumber, float i_EnergyPercentageMeter, List<Tire> i_ListOfTires,

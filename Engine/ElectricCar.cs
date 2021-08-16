@@ -12,6 +12,10 @@ namespace Engine
             get { return r_CarEngine; }
         }
 
+        public ElectricCar(string i_LicenseNumber, int i_NumberOfTires, float i_TiresMaxAirPressure) : base(i_LicenseNumber, i_NumberOfTires, i_TiresMaxAirPressure)
+        {
+            r_CarEngine = new ElectricEngine(3.2f, 0);
+        }
 
         public ElectricCar(string i_ModelName, string i_LicenseNumber, float i_EnergyPercentageMeter, List<Tire> i_ListOfTires,
                            eCarColor i_CarColor, int i_NumberOfDoors,
@@ -30,9 +34,9 @@ namespace Engine
         }
         
 
-        public void Refuel(float i_MinutesToCharge)
+        public void ReCharge(float i_MinutesToCharge)
         {
-            r_CarEngine.Refuel(i_MinutesToCharge);
+            r_CarEngine.Recharge(i_MinutesToCharge);
         }
 
         public override string ToString()

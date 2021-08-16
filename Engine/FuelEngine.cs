@@ -2,7 +2,7 @@
 
 namespace Engine
 {
-    public class FuelEngine
+    public class FuelEngine : Engine
     {
         public enum eVehicleFuelType
         {
