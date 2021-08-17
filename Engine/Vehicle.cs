@@ -9,7 +9,8 @@ namespace Engine
         private readonly string r_LicenseNumber; 
         private float m_EnergyPercentageMeter = 0;
         private readonly List<Tire> r_ListOfTires;
-        
+        private int r_NumberOfQuestions;
+
         public Vehicle(List<string> i_CommonVehicleInfo) // 0-licenseNumber, 1- ModelName , 2- m_EnergyPercentageMeter , tires: 3- manufactureName, 4- current air pressure , 5- max air pressure
         {
            /* r_LicenseNumber = i_CommonVehicleInfo[0];
@@ -98,16 +99,33 @@ namespace Engine
             return base.Equals(obj);
         }
 
-        public /*override*/ void ListOfQuestions()
+        public virtual List<string> ListOfQuestions()
         {
             List<string> listOfQuestions = new List<String>();
 
-            string question = "Please write the module name:";
+            string question = "Please write the vehicle module name: ";
             listOfQuestions.Add(question);
 
-            question = "Please write the data about the tires:\n" +
-                       "Please write the name of the manufacture: ";
+            question = "Please write the name of the tire manufacture: ";
             listOfQuestions.Add(question);
+
+            question = "Please write the current air pressure of the tire: ";
+            listOfQuestions.Add(question);
+
+            return listOfQuestions;
+        }
+
+
+        public int NumberOfQuestions()
+        {
+            List<string> listOfQuestions = ListOfQuestions();
+
+            return listOfQuestions.Count;
+        }
+        public /*virtual*/ void UpdateVehicle(List<string> i_SpecificTypeOfVehicleInfo, int i_CurrentQuestion)
+        {
+            //0 -module, 1- tire manufacture, 2-air pressure
+
         }
     }
 }

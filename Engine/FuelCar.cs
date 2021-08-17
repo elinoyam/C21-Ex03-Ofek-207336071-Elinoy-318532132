@@ -44,5 +44,14 @@ namespace Engine
                 $" The {ListOfTires.Count} {ListOfTires[0].ManufactureName} tires filled with {ListOfTires[0].CurrentAirPressure} air pressure. " +
                 $"The {CarEngine.FuelType} fuel status is: {CarEngine.CurrentFuelCapacity}. ";
         }
+
+        public override List<string> ListOfQuestions()
+        {
+            List<string> listOfQuestions = base.ListOfQuestions();
+
+            listOfQuestions.AddRange(r_CarEngine.ListOfQuestions());
+
+            return listOfQuestions;
+        }
     }
 }

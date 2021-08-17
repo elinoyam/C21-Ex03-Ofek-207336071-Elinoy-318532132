@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Engine
 {
-    public class ElectricCar : Car
+    public class ElectricCar : Car, Rechargable
     {
         private readonly ElectricEngine r_CarEngine;
 
@@ -44,6 +44,15 @@ namespace Engine
             return $"This is a {ModelName} electric car with {LicenseNumber} license plate. " +
                 $" The {ListOfTires.Count} {ListOfTires[0].ManufactureName} tires filled with {ListOfTires[0].CurrentAirPressure} air pressure. " +
                 $"The battery status is: {CarEngine.BatteryTimeRemainingInHours}. ";
+        }
+
+        public override List<string> ListOfQuestions()
+        {
+            List<string> listOfQuestions = base.ListOfQuestions();
+
+            listOfQuestions.AddRange(r_CarEngine.ListOfQuestions());
+
+            return listOfQuestions;
         }
     }
 }

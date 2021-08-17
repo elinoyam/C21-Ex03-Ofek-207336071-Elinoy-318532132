@@ -54,5 +54,14 @@ namespace Engine
         {
             r_TruckfuelEngine.Refuel(i_FuelType, i_AmountToFill);
         }
+
+        public override List<string> ListOfQuestions()
+        {
+            List<string> listOfQuestions = base.ListOfQuestions();
+
+            listOfQuestions.AddRange(r_TruckfuelEngine.ListOfQuestions());
+
+            return listOfQuestions;
+        }
     }
 }

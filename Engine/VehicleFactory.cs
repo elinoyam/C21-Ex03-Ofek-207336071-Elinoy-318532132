@@ -8,7 +8,16 @@ namespace Engine
 {
     public class VehicleFactory
     {
-        public Vehicle MakeNewVehicle(eAvailableTypesOfVehicles i_VehicleType, string i_LicenseNumber)
+        public enum eAvailableTypesOfVehicles
+        {
+            FuelMotorcycle = 1,
+            ElectricMotorcycle,
+            FuelCar,
+            ElectricCar,
+            Truck
+        }
+
+        public static Vehicle MakeNewVehicle(eAvailableTypesOfVehicles i_VehicleType, string i_LicenseNumber)
         {
             Vehicle vehicle;
 

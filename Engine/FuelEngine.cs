@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Engine
 {
@@ -80,6 +81,16 @@ namespace Engine
             {
                 CurrentFuelCapacity += i_FuelAmoutToAdd;
             }
+        }
+
+        public List<string> ListOfQuestions()
+        {
+            List<string> listOfQuestions = new List<String>();
+
+            string question = "Please write the current amount of fuel: "; //TODO add print enum colors
+            listOfQuestions.Add(question);
+
+            return listOfQuestions;
         }
     }
 }

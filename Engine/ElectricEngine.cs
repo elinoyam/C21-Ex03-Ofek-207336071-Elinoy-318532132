@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Engine
 {
@@ -48,6 +49,15 @@ namespace Engine
             {
                 m_BatteryTimeRemainingInHours += i_AmoutOfHoursToAdd;
             }
+        }
+
+        public List<string> ListOfQuestions()
+        {
+            List<string> listOfQuestions = new List<String>();
+            string question = "Please write the current value of battery: "; //TODO add print enum colors
+            listOfQuestions.Add(question);
+
+            return listOfQuestions;
         }
     }
 }

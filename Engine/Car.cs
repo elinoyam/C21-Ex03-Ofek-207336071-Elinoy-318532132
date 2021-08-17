@@ -58,5 +58,17 @@ namespace Engine
             m_NumberOfDoors = i_NumberOfDoors;
         }
 
+        public override List<string> ListOfQuestions()
+        {
+            List<string> listOfQuestions = base.ListOfQuestions();
+            string question = "Please write your type of color: "; //TODO add print enum colors
+            listOfQuestions.Add(question);
+
+            question = "Please write the amount of doors: ";
+            listOfQuestions.Add(question);
+
+            return listOfQuestions;
+        }
+
     }
 }

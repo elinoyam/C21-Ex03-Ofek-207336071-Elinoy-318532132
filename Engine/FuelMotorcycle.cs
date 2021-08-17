@@ -49,5 +49,14 @@ namespace Engine
         {
             r_MotorcycleEngine.Refuel(i_FuelType, i_AmountToFill);
         }
+
+        public override List<string> ListOfQuestions()
+        {
+            List<string> listOfQuestions = base.ListOfQuestions();
+
+            listOfQuestions.AddRange(r_MotorcycleEngine.ListOfQuestions());
+
+            return listOfQuestions;
+        }
     }
 }

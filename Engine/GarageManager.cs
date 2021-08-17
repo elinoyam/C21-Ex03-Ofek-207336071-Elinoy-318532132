@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using static Engine.VehicleFactory;
 
 namespace Engine
 {
     public class GarageManager
     {
-        public enum eAvailableTypesOfVehicles
-        {
-            FuelMotorcycle,
-            ElectricMotorcycle,
-            FuelCar,
-            ElectricCar,
-            Truck
-        }
+   
 
         private Dictionary<string, GarageCard> m_VehiclesInGarage = new Dictionary<string, GarageCard>();
 
@@ -22,6 +16,12 @@ namespace Engine
         //    m_VehiclesInGarage = new Dictionary<string, GarageCard>();
         //}
 
+        public List<string> InsertNewVehicleToGarage(eAvailableTypesOfVehicles i_VehicleType, string str)
+        {
+            Vehicle v = MakeNewVehicle(i_VehicleType, str);
+
+            return v.ListOfQuestions();
+        }
 
         public bool InsertNewVehicleToGarage(eAvailableTypesOfVehicles i_VehicleType, List<string> i_OwnerVehicleInfo,
                                              List<string> i_CommonVehicleInfo, List<object> i_CommonTypeOfVehicleInfo, List<object> i_SpecificTypeOfVehicleInfo)
@@ -88,7 +88,10 @@ namespace Engine
         public void ChargeElectricVehicle(string i_LicensePlate, float i_MinutesToCharge)
         {
             Rechargable vehicle = m_VehiclesInGarage[i_LicensePlate].OwnerVehicle as Rechargable;
+            if(vehicle != null)
+            {
             vehicle.ReCharge(i_MinutesToCharge);
+            }
         }
 
         public void RefuelFuelVehicle(string i_LicensePlate, string i_FuelType, float i_AmountToFill)
@@ -97,7 +100,10 @@ namespace Engine
             bool goodInput = FuelEngine.eVehicleFuelType.TryParse(i_FuelType, out fuelType);
 
             Refuelable vehicle = m_VehiclesInGarage[i_LicensePlate].OwnerVehicle as Refuelable;
-            vehicle.Refuel(fuelType, i_AmountToFill);
+            if (vehicle != null)
+            {
+                vehicle.Refuel(fuelType, i_AmountToFill);
+            }
         }
 
         public string GetVehicleDetails(string i_LicensePlate)
@@ -107,9 +113,17 @@ namespace Engine
             return vehicle.ToString();
         }
 
+        public void UpdateVehicle(string licenseNumber,List<string> specificTypeOfVehicleInfo)
+        {
+            Vehicle vehicle = m_VehiclesInGarage[licenseNumber].OwnerVehicle;
+            vehicle.UpdateVehicle(specificTypeOfVehicleInfo, 0);
+        }
+
         //public Vehicle GetVehicle(string i_LicensePlate)      // TODO: I don't know if we need this method
         //{
         //    return m_VehiclesInGarage[i_LicensePlate].OwnerVehicle;
         //}
+
+        //public static List<string> GetEnum
     }
 }

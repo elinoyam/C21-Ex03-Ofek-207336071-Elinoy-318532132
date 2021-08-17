@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Engine
 {
-    public class ElectricMotorcycle : Motorcycle
+    public class ElectricMotorcycle : Motorcycle, Rechargable
     {
         private readonly ElectricEngine r_MotorcycleEngine;
         public ElectricEngine MotorcycleEngine
@@ -41,6 +41,15 @@ namespace Engine
         public void ReCharge(float i_MinutesToCharge)
         {
             r_MotorcycleEngine.Recharge(i_MinutesToCharge);
+        }
+
+        public override List<string> ListOfQuestions()
+        {
+            List<string> listOfQuestions = base.ListOfQuestions();
+
+            listOfQuestions.AddRange(r_MotorcycleEngine.ListOfQuestions());
+
+            return listOfQuestions;
         }
     }
 }
