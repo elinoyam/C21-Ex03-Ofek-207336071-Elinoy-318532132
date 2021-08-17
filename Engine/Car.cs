@@ -10,7 +10,12 @@ namespace Engine
 
         public eCarColor Color
         {
-            get { return m_CarColor; }
+            get
+            {
+                return m_CarColor;
+
+            }
+
             set
             {
                 if (System.Enum.IsDefined(typeof(eCarColor), value))
@@ -26,10 +31,15 @@ namespace Engine
 
         public int NumberOfDoors
         {
-            get { return m_NumberOfDoors; }
+            get
+            {
+                return m_NumberOfDoors;
+
+            }
+
             set
             {
-                if(2<= value && value <= 5)
+                if (2 <= value && value <= 5)
                 {
                     m_NumberOfDoors = value;
                 }
@@ -50,10 +60,10 @@ namespace Engine
 
         public enum eNumberOfCarDoors
         {
-           Two= 2,
-        Three=3,
-        Four=4,
-        Five =5
+            Two = 2,
+            Three,
+            Four,
+            Five
         }
 
         public Car(string i_LicenseNumber, int i_NumberOfTires, float i_TiresMaxAirPressure) : base(i_LicenseNumber, i_NumberOfTires, i_TiresMaxAirPressure)
@@ -71,12 +81,10 @@ namespace Engine
             List<string> listOfQuestions = base.ListOfQuestions();
             string question = "Please write your type of color: "; //TODO add print enum colors
             listOfQuestions.Add(question);
-
             question = "Please write the amount of doors: ";
             listOfQuestions.Add(question);
 
             return listOfQuestions;
         }
-
     }
 }

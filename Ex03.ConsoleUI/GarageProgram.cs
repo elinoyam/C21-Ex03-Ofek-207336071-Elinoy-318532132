@@ -35,7 +35,7 @@ namespace Ex03.ConsoleUI
                             ChangeVehicleStatus();
                             break;
                         case eMainMenuOptions.Option4:
-                            RefuelVehicle();
+                            InflateVehicleTires();
                             break;
                         case eMainMenuOptions.Option5:
                             RefuelVehicle();
@@ -50,13 +50,13 @@ namespace Ex03.ConsoleUI
                             QuitProgram();
                             break;
                         default:
-                            Console.WriteLine("You entered invaild option.");
+                            Console.WriteLine("You entered invalid option.");
                             break;
                     }
                 }
                 else
                 {
-                    Console.WriteLine("You entered invaild option. Only integer numbers are allowed ");
+                    Console.WriteLine("You entered invalid option. Only integer numbers are allowed ");
                 }
             }
         }
@@ -82,6 +82,29 @@ namespace Ex03.ConsoleUI
                 }
             }
             catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public void InflateVehicleTires()
+        {
+            string licenseNumber;
+
+            Console.WriteLine("Enter license plate number:");
+            licenseNumber = Console.ReadLine();
+            try
+            {
+                if (m_GarageManager.IsVehicleInGarage(licenseNumber))
+                {
+                    m_GarageManager.InflateTiresAirToMaximum(licenseNumber);
+                }
+                else
+                {
+                    Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
+                }
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }

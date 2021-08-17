@@ -22,6 +22,7 @@ namespace Engine
             {
                 return m_BatteryTimeRemainingInHours;
             }
+
             set
             {
                 if (m_BatteryTimeRemainingInHours > r_MaxBatteryTimeInHours)
@@ -43,7 +44,7 @@ namespace Engine
         {
             if (m_BatteryTimeRemainingInHours + i_AmoutOfHoursToAdd > r_MaxBatteryTimeInHours)
             {
-                throw new ValueOutOfRangeException(r_MaxBatteryTimeInHours, 0, "The amount of hours to add exceeds what is allowed in this engine.");
+                throw new ValueOutOfRangeException(r_MaxBatteryTimeInHours, 0, $"The amount of hours to add exceeds what is allowed in this engine.\nYou can charge only {r_MaxBatteryTimeInHours-m_BatteryTimeRemainingInHours} more hours.");
             }
             else
             {

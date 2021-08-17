@@ -6,10 +6,13 @@ namespace Engine
     public class ElectricCar : Car, Rechargable
     {
         private readonly ElectricEngine r_CarEngine;
-
         public ElectricEngine CarEngine
         {
-            get { return r_CarEngine; }
+            get
+            {
+                return r_CarEngine;
+
+            }
         }
 
         public ElectricCar(string i_LicenseNumber, int i_NumberOfTires, float i_TiresMaxAirPressure) : base(i_LicenseNumber, i_NumberOfTires, i_TiresMaxAirPressure)
@@ -32,7 +35,6 @@ namespace Engine
         {
             r_CarEngine = i_ElectricEngine;
         }
-        
 
         public void ReCharge(float i_MinutesToCharge)
         {
