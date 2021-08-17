@@ -91,10 +91,13 @@ namespace Engine
             vehicle.ReCharge(i_MinutesToCharge);
         }
 
-        public void RefuelFuelVehicle(string i_LicensePlate, FuelEngine.eVehicleFuelType i_FuelType, float i_AmountToFill)
+        public void RefuelFuelVehicle(string i_LicensePlate, string i_FuelType, float i_AmountToFill)
         {
+            FuelEngine.eVehicleFuelType fuelType;
+            bool goodInput = FuelEngine.eVehicleFuelType.TryParse(i_FuelType, out fuelType);
+
             Refuelable vehicle = m_VehiclesInGarage[i_LicensePlate].OwnerVehicle as Refuelable;
-            vehicle.Refuel(i_FuelType, i_AmountToFill);
+            vehicle.Refuel(fuelType, i_AmountToFill);
         }
 
         public string GetVehicleDetails(string i_LicensePlate)

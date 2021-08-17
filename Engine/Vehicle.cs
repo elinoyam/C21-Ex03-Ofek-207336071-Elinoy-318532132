@@ -97,5 +97,17 @@ namespace Engine
 
             return base.Equals(obj);
         }
+
+        public /*override*/ void ListOfQuestions()
+        {
+            List<string> listOfQuestions = new List<String>();
+
+            string question = "Please write the module name:";
+            listOfQuestions.Add(question);
+
+            question = "Please write the data about the tires:\n" +
+                       "Please write the name of the manufacture: ";
+            listOfQuestions.Add(question);
+        }
     }
 }

@@ -177,7 +177,7 @@ namespace Ex03.ConsoleUI
                         break;
                     case 5:
                         float amountToRefuel;
-                        FuelEngine.eVehicleFuelType fuelType;
+                        string fuelType;
 
                         Console.WriteLine("Enter license plate number:");
                         licenseNumber = Console.ReadLine();
@@ -185,8 +185,11 @@ namespace Ex03.ConsoleUI
                         inputFromUser = Console.ReadLine();
                         goodInput = float.TryParse(inputFromUser, out amountToRefuel);
                         Console.WriteLine("Enter the type of fuel:");
-                        inputFromUser = Console.ReadLine();
-                        goodInput = FuelEngine.eVehicleFuelType.TryParse(inputFromUser, out fuelType);
+                        fuelType = Console.ReadLine();
+                        if (goodInput)
+                        {
+                            garageManager.RefuelFuelVehicle(licenseNumber, fuelType, amountToRefuel);
+                        }
                         break;
                     case 6:
                         float amountToAdd;
