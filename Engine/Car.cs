@@ -48,6 +48,14 @@ namespace Engine
             Black
         }
 
+        public enum eNumberOfCarDoors
+        {
+           Two= 2,
+        Three=3,
+        Four=4,
+        Five =5
+        }
+
         public Car(string i_LicenseNumber, int i_NumberOfTires, float i_TiresMaxAirPressure) : base(i_LicenseNumber, i_NumberOfTires, i_TiresMaxAirPressure)
         {
         }

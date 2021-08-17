@@ -1,64 +1,98 @@
 ﻿using Engine;
 using System;
 using System.Collections.Generic;
-using static Engine.GarageManager;
 using static Engine.VehicleFactory;
 
 namespace Ex03.ConsoleUI
 {
     class GarageProgram
     {
-        GarageManager garageManager = new GarageManager();
-
-
+        private GarageManager m_GarageManager = new GarageManager();
+        private bool m_GameLoop = true;
 
         public void RunForestRun()
         {
-            GarageManager garageManager = new GarageManager();
             string inputFromUser;
             bool goodInput = false;
-            int whatToDo;
+            eMainMenuOptions whatToDo;
 
-
-
-            while(true) //TODO change it to bool
+            while(m_GameLoop) 
             {
                 PrintMainMenu();
                 inputFromUser = Console.ReadLine();
-                goodInput = int.TryParse(inputFromUser, out whatToDo);
-
-                switch(whatToDo)
+                goodInput = eMainMenuOptions.TryParse(inputFromUser, out whatToDo);
+                if(goodInput)
                 {
-                    case 1: //want to insert new car to the garage
-                        InsertNewVehicleToGarage();
-                        break;
-
-                    case 2:
-                        Console.WriteLine("Hello, print");
-
-
-                        break;
-                    case 5:
-                        RefuelVehicle();
-                        break;
-                    case 6:
-                        ChargeElectricVehicle();
-                        break;
-                    case 7:
-                        ShowVehicleDetails();
-                        break;
-                    default:
-                        break;
+                    switch(whatToDo)
+                    {
+                        case eMainMenuOptions.Option1:
+                            InsertNewVehicleToGarage();
+                            break;
+                        case eMainMenuOptions.Option2:
+                            ShowLicensePlateOfVehiclesInGarage();
+                            break;
+                        case eMainMenuOptions.Option3:
+                            ChangeVehicleStatus();
+                            break;
+                        case eMainMenuOptions.Option4:
+                            RefuelVehicle();
+                            break;
+                        case eMainMenuOptions.Option5:
+                            RefuelVehicle();
+                            break;
+                        case eMainMenuOptions.Option6:
+                            ChargeElectricVehicle();
+                            break;
+                        case eMainMenuOptions.Option7:
+                            ShowVehicleDetails();
+                            break;
+                        case eMainMenuOptions.Option8:
+                            QuitProgram();
+                            break;
+                        default:
+                            Console.WriteLine("You entered invaild option.");
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("You entered invaild option. Only integer numbers are allowed ");
                 }
             }
+        }
 
+        public void ChangeVehicleStatus()
+        {
+            string licenseNumber, inputFromUser;
+
+            Console.WriteLine("Enter license plate number:");
+            licenseNumber = Console.ReadLine();
+            Console.WriteLine("Enter the new status:");
+            PrintEnumOptions(typeof(GarageCard.eVehicleState));
+            inputFromUser = Console.ReadLine();
+            try 
+            { 
+                if (m_GarageManager.IsVehicleInGarage(licenseNumber))
+                {
+                    m_GarageManager.ChangeVehicleStatus(licenseNumber, inputFromUser);
+                }
+                else 
+                {
+                    Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         public void ShowLicensePlateOfVehiclesInGarage()
         {
             int userChoice;
-            string licenseNumber, inputFromUser;
+            string inputFromUser;
             bool goodInput;
+            List<string> listToPrintInGarage;
 
             Console.WriteLine("Choose which license plate to show: (1 - Show All, 2 - Filter status)");
             inputFromUser = Console.ReadLine();
@@ -67,7 +101,7 @@ namespace Ex03.ConsoleUI
             {
                 if(userChoice == 1)
                 {
-                    List<string> listToPrintInGarage = garageManager.GetLicensePlateInGarage();
+                    listToPrintInGarage = m_GarageManager.GetLicensePlateInGarage();
                     foreach (string licensePlateNumber in listToPrintInGarage)
                     {
                         Console.WriteLine(licensePlateNumber);
@@ -75,15 +109,16 @@ namespace Ex03.ConsoleUI
                 }
                 else if(userChoice == 2)
                 {
-                    List<string> listToPrintInGarage = garageManager.GetLicensePlateInGarage();
+                    Console.WriteLine("Choose which status plate you want to show:");
+                    PrintEnumOptions(typeof(GarageCard.eVehicleState));
+                    inputFromUser = Console.ReadLine();
+                    listToPrintInGarage = m_GarageManager.GetLicensePlateInGarage(inputFromUser);
                     foreach (string licensePlateNumber in listToPrintInGarage)
                     {
                         Console.WriteLine(licensePlateNumber);
                     }
-
                 }
             }
-
         }
 
         public void RefuelVehicle()
@@ -100,15 +135,15 @@ namespace Ex03.ConsoleUI
             Console.WriteLine("Enter the type of fuel:");
             PrintEnumOptions(typeof(FuelEngine.eVehicleFuelType));
             fuelType = Console.ReadLine();
-            if (goodInput && garageManager.IsVehicleInGarage(licenseNumber))
+            if (goodInput && m_GarageManager.IsVehicleInGarage(licenseNumber))
             {
-                garageManager.RefuelFuelVehicle(licenseNumber, fuelType, amountToRefuel);
+                m_GarageManager.RefuelFuelVehicle(licenseNumber, fuelType, amountToRefuel);
             }
             else if (!goodInput)
             {
                 Console.WriteLine("You can refuel only decimal number.");
             }
-            else // !garageManager.IsVehicleInGarage(licenseNumber)
+            else // !m_GarageManager.IsVehicleInGarage(licenseNumber)
             {
                 Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
             }
@@ -126,15 +161,15 @@ namespace Ex03.ConsoleUI
                 Console.WriteLine("Enter the hours to charge:");
                 inputFromUser = Console.ReadLine();
                 goodInput = float.TryParse(inputFromUser, out amountToAdd);
-                if (goodInput && garageManager.IsVehicleInGarage(licenseNumber))
+                if (goodInput && m_GarageManager.IsVehicleInGarage(licenseNumber))
                 {
-                    garageManager.ChargeElectricVehicle(licenseNumber, amountToAdd);
+                    m_GarageManager.ChargeElectricVehicle(licenseNumber, amountToAdd);
                 }
                 else if (!goodInput)
                 {
                     Console.WriteLine("You can charge only decimal number.");
                 }
-                else // !garageManager.IsVehicleInGarage(licenseNumber)
+                else // !m_GarageManager.IsVehicleInGarage(licenseNumber)
                 {
                     Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
                 }
@@ -151,9 +186,9 @@ namespace Ex03.ConsoleUI
 
             Console.WriteLine("Enter license plate number:");
             licenseNumber = Console.ReadLine();
-            if (garageManager.IsVehicleInGarage(licenseNumber))
+            if (m_GarageManager.IsVehicleInGarage(licenseNumber))
             {
-                vehicleDetails = garageManager.GetVehicleDetails(licenseNumber);
+                vehicleDetails = m_GarageManager.GetVehicleDetails(licenseNumber);
                 Console.WriteLine(vehicleDetails);
             }
             else
@@ -170,7 +205,8 @@ namespace Ex03.ConsoleUI
                                      + "3 - Change a vehicle's status.\n"
                                      + "4 - Inflate a specific vehicle's tires to maximum air pressure.\n"
                                      + "5 - Refuel a fuel based vehicle.\n" + "6 - Charge an electric based vehicle.\n"
-                                     + "7 - Display a vehicle's full information.\n";
+                                     + "7 - Display a vehicle's full information.\n"
+                                     + "8 - Quit the program\n";
 
             Console.WriteLine(mainMenuOptions);
         }
@@ -191,7 +227,7 @@ namespace Ex03.ConsoleUI
             Console.WriteLine("Please write the license number: ");
             licenseNumber = Console.ReadLine();
 
-            if(!garageManager.IsVehicleInGarage(licenseNumber))
+            if(!m_GarageManager.IsVehicleInGarage(licenseNumber))
             {
                 commonVehicleInfo.Add(licenseNumber); //licenseNumber
 
@@ -206,14 +242,14 @@ namespace Ex03.ConsoleUI
                 ownerVehicleInfo.Add(inputFromUser);
 
                 //4- enum type of vehicle -- look at 9
-                Console.WriteLine("Please select the type of the vehicle? (select the fucking number next to the type)"); //TODO delte fucking very important!!
+                Console.WriteLine("Please select the type of the vehicle? (select the number next to the type)"); //TODO delte fucking very important!!
                 PrintEnumOptions(typeof(eAvailableTypesOfVehicles));
                 inputFromUser = Console.ReadLine();
 
                 // TODO put in enum and check if it is in the enum class
                 goodInput = eAvailableTypesOfVehicles.TryParse(inputFromUser, out vehicleType);
 
-                List<string> vehicleQuestions =  garageManager.InsertNewVehicleToGarage(vehicleType, licenseNumber);
+                List<string> vehicleQuestions =  m_GarageManager.InsertNewVehicleToGarage(vehicleType, licenseNumber);
 
                 foreach(string question in vehicleQuestions)
                 {
@@ -222,7 +258,7 @@ namespace Ex03.ConsoleUI
                     specificTypeOfVehicleInfo.Add(inputFromUser);
                 }
 
-                //garageManager.UpdateVehicle(licenseNumber, specificTypeOfVehicleInfo);
+                //m_GarageManager.UpdateVehicle(licenseNumber, specificTypeOfVehicleInfo);
 
                 /*
                 //5- string module name
@@ -304,7 +340,7 @@ namespace Ex03.ConsoleUI
                 }
 
 
-                garageManager.InsertNewVehicleToGarage(
+                m_GarageManager.InsertNewVehicleToGarage(
                     vehicleType,
                     ownerVehicleInfo,
                     commonVehicleInfo,
@@ -315,7 +351,7 @@ namespace Ex03.ConsoleUI
             else //Vihcle in the garage
             {
                 //change status to in repair
-                garageManager.ChangeVehicleStatus(licenseNumber, GarageCard.eVehicleState.InRepair);
+                m_GarageManager.ChangeVehicleStatus(licenseNumber, GarageCard.eVehicleState.InRepair);
             }
 
         }
@@ -336,7 +372,24 @@ namespace Ex03.ConsoleUI
                 ++index;
             }
 
-            Console.Write(")");
+            Console.WriteLine(" )");
+        }
+
+        public void QuitProgram()
+        {
+            m_GameLoop = false;
+        }
+
+        public enum eMainMenuOptions
+        {
+            Option1 = 1,
+            Option2,
+            Option3,
+            Option4,
+            Option5,
+            Option6,
+            Option7,
+            Option8
         }
 
     }

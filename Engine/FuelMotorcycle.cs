@@ -58,5 +58,19 @@ namespace Engine
 
             return listOfQuestions;
         }
+
+        public virtual void UpdateVehicle(List<string> i_SpecificTypeOfVehicleInfo, ref int i_CurrentQuestion)
+        {
+            UpdateVehicle(i_SpecificTypeOfVehicleInfo, ref i_CurrentQuestion);
+            // i need to do 2 questions
+            int index = NumberOfQuestions(); //3+2
+
+            for (; i_CurrentQuestion < index; ++i_CurrentQuestion)
+            {
+                //0 -module, 1- tire manufacture, 2-air pressure
+                //read 2
+            }
+
+        }
     }
 }

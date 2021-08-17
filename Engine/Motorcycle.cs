@@ -1,5 +1,6 @@
 ﻿using System; //TODO does class in engine need system??
 using System.Collections.Generic;
+using System.Text;
 
 namespace Engine
 {
@@ -54,6 +55,46 @@ namespace Engine
         {
             m_LicenseType = i_LicenseType;
             m_EngineCapacity = i_EngineCapacity;
+        }
+        public override List<string> ListOfQuestions()
+        {
+            int index = 1;
+            StringBuilder stringBuilder = new StringBuilder("");
+            List<string> listOfQuestions = base.ListOfQuestions();
+            string question = "Please write your type of license: "; 
+            stringBuilder.Append("(");
+            foreach (string name in Enum.GetNames(typeof(eMotorcycleLicenseType)))
+            {
+                if (index != 1)
+                {
+                    stringBuilder.Append(",");
+                }
+
+                stringBuilder.Append($" {index} - {name}");
+                ++index;
+            }
+
+            stringBuilder.Append(" )");
+            question = $"{question} \n{stringBuilder}";
+            listOfQuestions.Add(question);
+            question = "Please write your engine capacity: ";
+            listOfQuestions.Add(question);
+
+            return listOfQuestions;
+        }
+
+        public virtual void UpdateVehicle(List<string> i_SpecificTypeOfVehicleInfo, ref int i_CurrentQuestion)
+        {
+            UpdateVehicle(i_SpecificTypeOfVehicleInfo, ref i_CurrentQuestion);
+            // i need to do 2 questions
+            int index = NumberOfQuestions(); //3+2
+           
+            for(; i_CurrentQuestion < index; ++i_CurrentQuestion)
+            {
+                //0 -module, 1- tire manufacture, 2-air pressure
+                //read 2
+            }
+
         }
     }
 }

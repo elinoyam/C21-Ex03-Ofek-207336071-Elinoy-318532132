@@ -9,7 +9,6 @@ namespace Engine
         private readonly string r_LicenseNumber; 
         private float m_EnergyPercentageMeter = 0;
         private readonly List<Tire> r_ListOfTires;
-        private int r_NumberOfQuestions;
 
         public Vehicle(List<string> i_CommonVehicleInfo) // 0-licenseNumber, 1- ModelName , 2- m_EnergyPercentageMeter , tires: 3- manufactureName, 4- current air pressure , 5- max air pressure
         {
@@ -122,10 +121,17 @@ namespace Engine
 
             return listOfQuestions.Count;
         }
-        public /*virtual*/ void UpdateVehicle(List<string> i_SpecificTypeOfVehicleInfo, int i_CurrentQuestion)
-        {
-            //0 -module, 1- tire manufacture, 2-air pressure
 
+        public virtual void UpdateVehicle(List<string> i_SpecificTypeOfVehicleInfo, ref int i_CurrentQuestion)
+        {
+            int index = NumberOfQuestions(); //3
+            for(i_CurrentQuestion = 0; i_CurrentQuestion < index; ++i_CurrentQuestion)
+            {
+                //0 -module, 1- tire manufacture, 2-air pressure
+                //read 3
+                //list 
+            }
+            //retruen
         }
     }
 }
