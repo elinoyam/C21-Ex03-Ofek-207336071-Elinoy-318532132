@@ -31,8 +31,7 @@ namespace Engine
                 }
                 else
                 {
-                    throw new ArgumentException(); // TODO think of the propper exception
-                }
+                    throw new ArgumentException("The given value to the engine fuel type is not defined.");                 }
             }
         }
 
@@ -49,7 +48,6 @@ namespace Engine
             get
             {
                 return m_CurrentFuelCapacity;
-
             }
             set
             {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Engine
 {
-    public class ElectricCar : Car, Rechargable
+    public class ElectricCar : Car, IRechargable
     {
         private readonly ElectricEngine r_CarEngine;
         public ElectricEngine CarEngine
@@ -47,7 +47,12 @@ namespace Engine
                 $" The {ListOfTires.Count} {ListOfTires[0].ManufactureName} tires filled with {ListOfTires[0].CurrentAirPressure} air pressure. " +
                 $"The battery status is: {CarEngine.BatteryTimeRemainingInHours}. ";
         }
+        public override void AddParams()
+        {
 
+            //r_VehicleRequiredProperties.  (r_CarEngine.AddParams());
+            // TODO: add the engine to the params
+        }
         public override List<string> ListOfQuestions()
         {
             List<string> listOfQuestions = base.ListOfQuestions();

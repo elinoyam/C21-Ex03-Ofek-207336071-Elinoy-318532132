@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Engine
 {
-    interface Rechargable
+    interface IRefuelable
     {
-        void ReCharge(float i_MinutesToCharge);
+        void Refuel(FuelEngine.eVehicleFuelType i_FuelType, float i_AmountToFill);
     }
 }

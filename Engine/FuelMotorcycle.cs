@@ -3,23 +3,28 @@ using System.Collections.Generic;
 
 namespace Engine
 {
-    public class FuelMotorcycle : Motorcycle, Refuelable
+    public class FuelMotorcycle : Motorcycle, IRefuelable
     {
         private readonly FuelEngine r_MotorcycleEngine;
         public FuelEngine MotorcycleEngine
         {
-            get { return r_MotorcycleEngine; }
+            get
+            {
+                return r_MotorcycleEngine;
+
+            }
         }
 
         public FuelMotorcycle(string i_LicenseNumber, int i_NumberOfTires, float i_TiresMaxAirPressure) : base(i_LicenseNumber, i_NumberOfTires, i_TiresMaxAirPressure)
         {
             r_MotorcycleEngine = new FuelEngine(FuelEngine.eVehicleFuelType.Octan98, 6, 0);
         }
+
         public FuelMotorcycle(List<string> i_CommonVehicleInfo,
                               List<object> i_CommonTypeOfVehicleInfo, List<object> i_SpecificTypeOfVehicleInfo)
                             : base (i_CommonVehicleInfo, i_CommonTypeOfVehicleInfo)
         {
-            // i_SpecificTypeOfVehicleInfo - 0- 1-
+            // i_SpecificTypeOfVehicleInfo - 0- 1-  // TODO: check if we want to delete this method
         }
 
 
@@ -45,9 +50,17 @@ namespace Engine
                 $" The {ListOfTires.Count} {ListOfTires[0].ManufactureName} tires filled with {ListOfTires[0].CurrentAirPressure} air pressure. " +
                 $"The {MotorcycleEngine.FuelType} fuel status is: {MotorcycleEngine.CurrentFuelCapacity}. ";
         }
+
         public void Refuel(FuelEngine.eVehicleFuelType i_FuelType, float i_AmountToFill)
         {
             r_MotorcycleEngine.Refuel(i_FuelType, i_AmountToFill);
+        }
+
+        public override void AddParams()
+        {
+            base.AddParams();
+            //r_VehicleRequiredProperties.  (r_CarEngine.AddParams());
+            // TODO: add the engine to the params
         }
 
         public override List<string> ListOfQuestions()
@@ -60,7 +73,7 @@ namespace Engine
         }
 
         public virtual void UpdateVehicle(List<string> i_SpecificTypeOfVehicleInfo, ref int i_CurrentQuestion)
-        {
+        {   // TODO: check if we need to change this to override - in all the needed places
             UpdateVehicle(i_SpecificTypeOfVehicleInfo, ref i_CurrentQuestion);
             // i need to do 2 questions
             int index = NumberOfQuestions(); //3+2
@@ -70,7 +83,6 @@ namespace Engine
                 //0 -module, 1- tire manufacture, 2-air pressure
                 //read 2
             }
-
         }
     }
 }

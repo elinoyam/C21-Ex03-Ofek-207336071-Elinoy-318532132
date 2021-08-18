@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using static Engine.FuelEngine;
 using static Engine.FuelEngine.eVehicleFuelType;
-using static Engine.GarageManager; // TODO y i need this? I just want the enum
 
 namespace Engine
 {
-    public class VehicleFactory
+    public class VehicleFactory     // TODO: think maybe delete most of the methods in this class
     {
         public enum eAvailableTypesOfVehicles
         {
@@ -48,7 +47,7 @@ namespace Engine
 
         public static Vehicle CreateNewVehicle(eAvailableTypesOfVehicles i_VehicleType, List<string> i_CommonVehicleInfo, 
                                                List<object> i_CommonTypeOfVehicleInfo, List<object> i_SpecificTypeOfVehicleInfo)
-        {
+        {   // TODO: remember to delete all of this!
             Vehicle newVehicle = null;
             string licenseNumber;
             string modelName;
@@ -144,7 +143,7 @@ namespace Engine
         }
 
         private static void getVehicleDetails(List<string> i_CommonVehicleInfo, out string o_LicenseNumber, out string o_ModelName)
-        {
+        {   // TODO: delete it?
             // 0-licenseNumber, 1- ModelName , 2- m_EnergyPercentageMeter
 
             o_LicenseNumber = i_CommonVehicleInfo[0];

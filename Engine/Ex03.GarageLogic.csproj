@@ -49,8 +49,9 @@
     <Compile Include="GarageCard.cs" />
     <Compile Include="GarageManager.cs" />
     <Compile Include="Motorcycle.cs" />
-    <Compile Include="Rechargable.cs" />
-    <Compile Include="Refuelable.cs" />
+    <Compile Include="Property.cs" />
+    <Compile Include="IRechargable.cs" />
+    <Compile Include="IRefuelable.cs" />
     <Compile Include="Tire.cs" />
     <Compile Include="Truck.cs" />
     <Compile Include="ValueOutOfRangeException.cs" />

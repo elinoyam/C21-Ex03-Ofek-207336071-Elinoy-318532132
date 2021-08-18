@@ -14,28 +14,54 @@ namespace Engine
         private readonly string r_OwnerName;
         private readonly string r_OwnerPhoneNumber;
         private eVehicleState m_VehicleCurrentState;
-        private Vehicle m_OwnerVehicle; //TODO pointer to vehicle
+        private Vehicle m_OwnerVehicle; 
         
         public string OwnerName
         {
-            get { return r_OwnerName; }
+            get
+            {
+                return r_OwnerName;
+
+            }
         }
 
         public string OwnerPhoneNumber
         {
-            get { return r_OwnerPhoneNumber; }
+            get
+            {
+                return r_OwnerPhoneNumber;
+
+            }
         }
 
         public eVehicleState VehicleCurrentState
         {
-            get { return m_VehicleCurrentState; }
-            set { m_VehicleCurrentState = value; }
+            get
+            {
+                return m_VehicleCurrentState;
+
+            }
+
+            set
+            {
+                m_VehicleCurrentState = value;
+
+            }
         }
 
         public Vehicle OwnerVehicle
         {
-            get { return m_OwnerVehicle; }
-            set { m_OwnerVehicle = value; }
+            get
+            {
+                return m_OwnerVehicle;
+
+            }
+
+            set
+            {
+                m_OwnerVehicle = value;
+
+            }
         }
 
         public GarageCard(List<string> i_OwnerVehicleInfo, Vehicle i_VehiclePointer)

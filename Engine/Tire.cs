@@ -10,15 +10,26 @@ namespace Engine
 
         public string ManufactureName
         {
-            get { return m_ManufactureName; }
-            set { m_ManufactureName = value; }
+            get
+            {
+                return m_ManufactureName;
+            }
+
+            set
+            {
+                m_ManufactureName = value;
+            }
         }
 
         public float CurrentAirPressure
         {
-            get { return m_CurrentAirPressure; }
+            get
+            {
+                return m_CurrentAirPressure;
+            }
+
             set {
-                if(value <= r_MaxAirPressureByManufacture)
+                if(value <= r_MaxAirPressureByManufacture && value>0)
                 {
                     m_CurrentAirPressure = value;
                 }
@@ -31,7 +42,10 @@ namespace Engine
 
         public float MaxAirPressure
         {
-            get { return r_MaxAirPressureByManufacture; }
+            get
+            {
+                return r_MaxAirPressureByManufacture;
+            }
         }
 
         public Tire(float i_MaxAirPressureByManufacture)

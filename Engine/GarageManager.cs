@@ -6,16 +6,8 @@ namespace Engine
 {
     public class GarageManager
     {
-   
-
-        private Dictionary<string, GarageCard> m_VehiclesInGarage = new Dictionary<string, GarageCard>();
-
-
-        //public GarageManager()
-        //{
-        //    m_VehiclesInGarage = new Dictionary<string, GarageCard>();
-        //}
-
+        private readonly Dictionary<string, GarageCard> m_VehiclesInGarage = new Dictionary<string, GarageCard>();
+        
         public List<string> InsertNewVehicleToGarage(eAvailableTypesOfVehicles i_VehicleType, string str)
         {
             Vehicle v = MakeNewVehicle(i_VehicleType, str);
@@ -38,9 +30,9 @@ namespace Engine
             return true; //TODO delete after implement
         }
 
-        public bool IsVehicleInGarage(string licenseNumber)
+        public bool IsVehicleInGarage(string i_LicenseNumber)
         {
-            return m_VehiclesInGarage.ContainsKey(licenseNumber);
+            return m_VehiclesInGarage.ContainsKey(i_LicenseNumber);
         }
 
         public List<string> GetLicensePlateInGarage()
@@ -59,6 +51,7 @@ namespace Engine
         {
             GarageCard.eVehicleState vehicleState;
             List<string> licensePlatesList = new List<string>();
+
             bool goodInput = Enum.TryParse(i_VehicleState, out vehicleState);
 
             if (goodInput) { 
@@ -78,17 +71,18 @@ namespace Engine
             return licensePlatesList;
         }
 
-        public void ChangeVehicleStatus(string i_LicensePlate, GarageCard.eVehicleState i_NewVehicleState)
+        public void ChangeVehicleStatus(string i_LicensePlateNumber, GarageCard.eVehicleState i_NewVehicleState)
         {
-            GarageCard garageCard = m_VehiclesInGarage[i_LicensePlate];
+            GarageCard garageCard = m_VehiclesInGarage[i_LicensePlateNumber];
             garageCard.VehicleCurrentState = i_NewVehicleState;
         }
-        public void ChangeVehicleStatus(string i_LicensePlate, string i_NewVehicleState)
+
+        public void ChangeVehicleStatus(string i_LicensePlateNumber, string i_NewVehicleState)
         {
             GarageCard.eVehicleState newState;
             bool goodInput;
 
-            GarageCard garageCard = m_VehiclesInGarage[i_LicensePlate];
+            GarageCard garageCard = m_VehiclesInGarage[i_LicensePlateNumber];
             goodInput = GarageCard.eVehicleState.TryParse(i_NewVehicleState,out newState);
             if (goodInput)
             {
@@ -107,19 +101,20 @@ namespace Engine
 
         public void ChargeElectricVehicle(string i_LicensePlate, float i_MinutesToCharge)
         {
-            Rechargable vehicle = m_VehiclesInGarage[i_LicensePlate].OwnerVehicle as Rechargable;
+            IRechargable vehicle = m_VehiclesInGarage[i_LicensePlate].OwnerVehicle as IRechargable;
+
             if(vehicle != null)
             {
-            vehicle.ReCharge(i_MinutesToCharge);
+                vehicle.ReCharge(i_MinutesToCharge);
             }
         }
 
-        public void RefuelFuelVehicle(string i_LicensePlate, string i_FuelType, float i_AmountToFill)
+        public void RefuelFuelVehicle(string i_LicensePlateNumber, string i_FuelType, float i_AmountToFill)
         {
             FuelEngine.eVehicleFuelType fuelType;
             bool goodInput = FuelEngine.eVehicleFuelType.TryParse(i_FuelType, out fuelType);
 
-            Refuelable vehicle = m_VehiclesInGarage[i_LicensePlate].OwnerVehicle as Refuelable;
+            IRefuelable vehicle = m_VehiclesInGarage[i_LicensePlateNumber].OwnerVehicle as IRefuelable;
             if (vehicle != null)
             {
                 vehicle.Refuel(fuelType, i_AmountToFill);
@@ -133,18 +128,11 @@ namespace Engine
             return vehicle.ToString();
         }
 
-        public void UpdateVehicle(string licenseNumber,List<string> specificTypeOfVehicleInfo)
+        public void UpdateVehicle(string i_LicenseNumber,List<string> i_SpecificTypeOfVehicleInfo)
         {
             int current = 0;
-            Vehicle vehicle = m_VehiclesInGarage[licenseNumber].OwnerVehicle;
-            vehicle.UpdateVehicle(specificTypeOfVehicleInfo, ref current);
+            Vehicle vehicle = m_VehiclesInGarage[i_LicenseNumber].OwnerVehicle;
+            vehicle.UpdateVehicle(i_SpecificTypeOfVehicleInfo, ref current);
         }
-
-        //public Vehicle GetVehicle(string i_LicensePlate)      // TODO: I don't know if we need this method
-        //{
-        //    return m_VehiclesInGarage[i_LicensePlate].OwnerVehicle;
-        //}
-
-        //public static List<string> GetEnum
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Engine
 {
-    public class FuelCar : Car, Refuelable
+    public class FuelCar : Car, IRefuelable
     {
         private readonly FuelEngine r_CarEngine;
 
@@ -12,7 +12,6 @@ namespace Engine
             get
             {
                 return r_CarEngine;
-
             }
         }
 
@@ -47,6 +46,13 @@ namespace Engine
             return $"This is a {ModelName} fuel car with {LicenseNumber} license plate. " +
                 $" The {ListOfTires.Count} {ListOfTires[0].ManufactureName} tires filled with {ListOfTires[0].CurrentAirPressure} air pressure. " +
                 $"The {CarEngine.FuelType} fuel status is: {CarEngine.CurrentFuelCapacity}. ";
+        }
+
+        public override void AddParams()
+        {
+            base.AddParams();
+            //r_VehicleRequiredProperties.  (r_CarEngine.AddParams());
+            // TODO: add the engine to the params
         }
 
         public override List<string> ListOfQuestions()

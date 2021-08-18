@@ -9,6 +9,7 @@ namespace Engine
         private readonly string r_LicenseNumber; 
         private float m_EnergyPercentageMeter = 0;
         private readonly List<Tire> r_ListOfTires;
+        protected readonly Dictionary<string, Property> r_VehicleRequiredProperties = new Dictionary<string, Property>();
 
         public Vehicle(List<string> i_CommonVehicleInfo) // 0-licenseNumber, 1- ModelName , 2- m_EnergyPercentageMeter , tires: 3- manufactureName, 4- current air pressure , 5- max air pressure
         {
@@ -60,23 +61,42 @@ namespace Engine
 
         public string ModelName
         {
-            get { return r_ModelName; }
+            get
+            {
+                return r_ModelName;
+            }
         }
 
         public string LicenseNumber
         {
-            get { return r_LicenseNumber; }
+            get
+            {
+                return r_LicenseNumber;
+            }
         }
 
         public float EnergyPercentageMeter
         {
-            get { return m_EnergyPercentageMeter; }
-            set { m_EnergyPercentageMeter = value; }
+            get
+            {
+                return m_EnergyPercentageMeter;
+            }
+
+            set
+            {
+                if(value > 0 && value <=100)
+                {
+                    m_EnergyPercentageMeter = value;
+                }
+            }
         }
 
         public List<Tire> ListOfTires
         {
-            get { return r_ListOfTires; }
+            get
+            {
+                return r_ListOfTires;
+            }
             // TODO do we need set?
         }
 
@@ -95,7 +115,22 @@ namespace Engine
                 isEqual = this.LicenseNumber == vehicle.LicenseNumber;
             }
 
-            return base.Equals(obj);
+            return isEqual;
+        }
+
+        public virtual void AddParams()
+        {
+            Property property = new Property("Car model name", "r_ModelName", typeof(string));
+            
+            property.FormQuestion = "Enter the model name of the car:";
+            r_VehicleRequiredProperties.Add("r_ModelName", property);
+        }
+
+        public void UpdateParams(Dictionary<string,Property> i_PropertiesToUpdate)
+        {
+            Type typeToCast = i_PropertiesToUpdate[r_ModelName].MemberType;
+            //r_ModelName = i_PropertiesToUpdate[r_ModelName].MemberValue as typeTo
+            // TODO: understand how do we cast to the real object type
         }
 
         public virtual List<string> ListOfQuestions()
@@ -104,16 +139,13 @@ namespace Engine
 
             string question = "Please write the vehicle module name: ";
             listOfQuestions.Add(question);
-
             question = "Please write the name of the tire manufacture: ";
             listOfQuestions.Add(question);
-
             question = "Please write the current air pressure of the tire: ";
             listOfQuestions.Add(question);
 
             return listOfQuestions;
         }
-
 
         public int NumberOfQuestions()
         {
@@ -123,7 +155,7 @@ namespace Engine
         }
 
         public virtual void UpdateVehicle(List<string> i_SpecificTypeOfVehicleInfo, ref int i_CurrentQuestion)
-        {
+        {   // TODO: to delete?
             int index = NumberOfQuestions(); //3
             for(i_CurrentQuestion = 0; i_CurrentQuestion < index; ++i_CurrentQuestion)
             {
@@ -131,7 +163,7 @@ namespace Engine
                 //read 3
                 //list 
             }
-            //retruen
+            //return
         }
     }
 }

@@ -76,6 +76,13 @@ namespace Engine
             m_NumberOfDoors = i_NumberOfDoors;
         }
 
+        public override void AddParams()
+        {
+            base.AddParams();
+            r_VehicleRequiredProperties.Add("m_CarColor", new Property("Car color", "m_CarColor",typeof(eCarColor)));
+            r_VehicleRequiredProperties.Add("m_NumberOfDoors", new Property("Number of car doors", "m_NumberOfDoors", typeof(int)));
+        }
+
         public override List<string> ListOfQuestions()
         {
             List<string> listOfQuestions = base.ListOfQuestions();
