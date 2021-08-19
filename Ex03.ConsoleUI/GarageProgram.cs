@@ -249,7 +249,7 @@ namespace Ex03.ConsoleUI
             Console.WriteLine("Please write the license number: ");
             licenseNumber = Console.ReadLine();
 
-            if(!r_GarageManager.IsVehicleInGarage(licenseNumber))
+            if (!r_GarageManager.IsVehicleInGarage(licenseNumber))
             {
                 commonVehicleInfo.Add(licenseNumber); //licenseNumber
 
@@ -264,21 +264,42 @@ namespace Ex03.ConsoleUI
                 ownerVehicleInfo.Add(inputFromUser);
 
                 //4- enum type of vehicle -- look at 9
-                Console.WriteLine("Please select the type of the vehicle? (select the number next to the type)"); //TODO delte fucking very important!!
+                Console.WriteLine("Please select the type of the vehicle? (select the number next to the type)");
                 PrintEnumOptions(typeof(eAvailableTypesOfVehicles));
                 inputFromUser = Console.ReadLine();
 
                 // TODO put in enum and check if it is in the enum class
                 goodInput = eAvailableTypesOfVehicles.TryParse(inputFromUser, out vehicleType);
 
-                List<string> vehicleQuestions =  r_GarageManager.InsertNewVehicleToGarage(vehicleType, licenseNumber);
+                Dictionary<string, Property> vehicleDictionary = r_GarageManager.InsertNewVehicleToGarage(vehicleType, licenseNumber, ownerVehicleInfo);
 
-                foreach(string question in vehicleQuestions)
+                foreach (KeyValuePair<string, Property> key in vehicleDictionary)
                 {
-                    Console.WriteLine(question);
-                    inputFromUser = Console.ReadLine();
-                    specificTypeOfVehicleInfo.Add(inputFromUser);
+                    bool good = false;
+                    while(!good)
+                    try
+                    {
+                        Console.WriteLine(key.Value.FormQuestion);
+                        if(key.Value.MemberType.BaseType == typeof(Enum))
+                        {
+                            PrintEnumOptions(key.Value.MemberType);
+                        }
+
+                        inputFromUser = Console.ReadLine();
+                        object parsedUserInput = r_GarageManager.TryParseToType(inputFromUser, key.Value.MemberType);
+                        // if I'm here I didn't throw exception so the type is good
+
+                        r_GarageManager.addParam(licenseNumber, parsedUserInput, key.Value.MemberName);
+                        good = true;
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine("ERROR!!"); //TODO change to properly maybe put in while
+                        Console.WriteLine(ex.Message);
+                        Console.WriteLine("Try again...\n"); //TODO change to properly maybe put in while
+                    }
                 }
+                Console.WriteLine("Congratulations! you created a new vehicle!\n");
 
                 //r_GarageManager.UpdateVehicle(licenseNumber, specificTypeOfVehicleInfo);
 
@@ -378,10 +399,160 @@ namespace Ex03.ConsoleUI
 
         }
 
+
+
+
+
+
+
+        //public void InsertNewVehicleToGarage()
+        //{
+        //    bool goodInput;
+        //    string licenseNumber, inputFromUser;
+        //    eAvailableTypesOfVehicles vehicleType; //TODO can i use it without the class name before?
+        //    List<string> ownerVehicleInfo = new List<string>(); //Garage ticket
+        //    List<string> commonVehicleInfo = new List<string>(); //Vehicle
+        //    List<string> commonTypeOfVehicleInfo = new List<string>(); //Car / Motorcycle
+        //    List<string> specificTypeOfVehicleInfo = new List<string>(); // engine / fuel (car / Motorcycle)
+
+        //    Console.WriteLine("You chose option 1 to Insert a vehicle to the garage!");
+        //    //1- string license number (plate?)
+        //    Console.WriteLine("Please write the license number: ");
+        //    licenseNumber = Console.ReadLine();
+
+        //    if(!r_GarageManager.IsVehicleInGarage(licenseNumber))
+        //    {
+        //        commonVehicleInfo.Add(licenseNumber); //licenseNumber
+
+        //        //2- string owner name
+        //        Console.WriteLine("Please write the owner name: ");
+        //        inputFromUser = Console.ReadLine();
+        //        ownerVehicleInfo.Add(inputFromUser);
+
+        //        //3- string owner phone number
+        //        Console.WriteLine("Please write the owner phone number: ");
+        //        inputFromUser = Console.ReadLine();
+        //        ownerVehicleInfo.Add(inputFromUser);
+
+        //        //4- enum type of vehicle -- look at 9
+        //        Console.WriteLine("Please select the type of the vehicle? (select the number next to the type)"); 
+        //        PrintEnumOptions(typeof(eAvailableTypesOfVehicles));
+        //        inputFromUser = Console.ReadLine();
+
+        //        // TODO put in enum and check if it is in the enum class
+        //        goodInput = eAvailableTypesOfVehicles.TryParse(inputFromUser, out vehicleType);
+
+        //        List<string> vehicleQuestions =  r_GarageManager.InsertNewVehicleToGarage(vehicleType, licenseNumber);
+
+        //        foreach(string question in vehicleQuestions)
+        //        {
+        //            Console.WriteLine(question);
+        //            inputFromUser = Console.ReadLine();
+        //            specificTypeOfVehicleInfo.Add(inputFromUser);
+        //        }
+
+        //        //r_GarageManager.UpdateVehicle(licenseNumber, specificTypeOfVehicleInfo);
+
+        //        /*
+        //        //5- string module name
+        //        Console.WriteLine("Please write the module name: ");
+        //        inputFromUser = Console.ReadLine();
+        //        commonVehicleInfo.Add(inputFromUser);
+
+        //        //6- list wheels
+        //        Console.WriteLine("Please write the data about the tires: ");
+        //        Console.WriteLine("Please write the name of the manufacture: ");
+        //        inputFromUser = Console.ReadLine();
+        //        commonVehicleInfo.Add(inputFromUser); // a- manufactureName
+
+        //        Console.WriteLine("Please write the current air pressure of the tire: ");
+        //        inputFromUser = Console.ReadLine();
+        //        commonVehicleInfo.Add(inputFromUser); // b- current air pressure
+
+
+        //        //7- state of the car is - "בתיקון"
+
+        //        //8- another switch case by the enum module we found to add data to build the right vehicle
+        //        switch(vehicleType ) 
+        //        {
+        //            case eAvailableTypesOfVehicles.FuelMotorcycle:
+        //            case eAvailableTypesOfVehicles.ElectricMotorcycle:
+        //                // Motorcycle-
+        //                //10 -type of license
+        //                Console.WriteLine("Please write your type of license: ");
+        //                inputFromUser = Console.ReadLine();
+        //                commonTypeOfVehicleInfo.Add(inputFromUser); //string
+
+        //                //11 -capacity
+        //                Console.WriteLine("Please write your engine capacity: ");
+        //                inputFromUser = Console.ReadLine();
+        //                commonTypeOfVehicleInfo.Add(inputFromUser); //int
+
+        //                // 12
+        //                Console.WriteLine("Please write the current amount of fuel: ");
+        //                inputFromUser = Console.ReadLine();
+        //                specificTypeOfVehicleInfo.Add(inputFromUser); //float
+
+        //                break;
+        //            case eAvailableTypesOfVehicles.FuelCar:
+        //            case eAvailableTypesOfVehicles.ElectricCar:
+        //                //10 -type of color
+        //                Console.WriteLine("Please write your type of color: ");
+        //                inputFromUser = Console.ReadLine();
+        //                commonTypeOfVehicleInfo.Add(inputFromUser); //enum
+
+        //                //11 - amount of doors
+        //                Console.WriteLine("Please write the amount of doors: ");
+        //                inputFromUser = Console.ReadLine();
+        //                commonTypeOfVehicleInfo.Add(inputFromUser); //int - TODO: add enum of the amount of doors
+
+        //                // 12
+        //                Console.WriteLine("Please write the current amount of fuel: ");
+        //                inputFromUser = Console.ReadLine();
+        //                specificTypeOfVehicleInfo.Add(inputFromUser); //float
+
+        //                break;
+
+        //            case eAvailableTypesOfVehicles.Truck:
+        //                //10 -type of color
+        //                Console.WriteLine("Please write if you carry dangerous materials (Y-yes or N-no): ");
+        //                inputFromUser = Console.ReadLine();
+        //                commonTypeOfVehicleInfo.Add(inputFromUser); //bool
+
+        //                // 11 - max carry weight 
+        //                Console.WriteLine("Please write your max carry weight : ");
+        //                inputFromUser = Console.ReadLine();
+        //                commonTypeOfVehicleInfo.Add(inputFromUser); //float
+
+        //                // 12
+        //                Console.WriteLine("Please write the current amount of fuel: ");
+        //                inputFromUser = Console.ReadLine();
+        //                specificTypeOfVehicleInfo.Add(inputFromUser); //float
+
+        //                break;
+        //        }
+
+
+        //        r_GarageManager.InsertNewVehicleToGarage(
+        //            vehicleType,
+        //            ownerVehicleInfo,
+        //            commonVehicleInfo,
+        //            commonTypeOfVehicleInfo,
+        //            specificTypeOfVehicleInfo);
+        //        */
+        //    }
+        //    else //Vihcle in the garage
+        //    {
+        //        //change status to in repair
+        //        r_GarageManager.ChangeVehicleStatus(licenseNumber, GarageCard.eVehicleState.InRepair);
+        //    }
+
+        //}
+
         public void PrintEnumOptions(Type i_EnumNamesToPrint)
         {
             int index = 1;
-
+            int printedIndex = (int)Enum.GetValues(i_EnumNamesToPrint).GetValue(0);
             Console.Write("(");
             foreach (string name in Enum.GetNames(i_EnumNamesToPrint))
             {
@@ -390,8 +561,9 @@ namespace Ex03.ConsoleUI
                     Console.Write(",");
                 }
 
-                Console.Write($" {index} - {name}");
+                Console.Write($" {printedIndex} - {name}");
                 ++index;
+                ++printedIndex;
             }
 
             Console.WriteLine(" )");

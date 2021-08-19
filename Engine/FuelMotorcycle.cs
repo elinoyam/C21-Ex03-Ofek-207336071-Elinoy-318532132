@@ -5,7 +5,7 @@ namespace Engine
 {
     public class FuelMotorcycle : Motorcycle, IRefuelable
     {
-        private readonly FuelEngine r_MotorcycleEngine;
+        private FuelEngine r_MotorcycleEngine;
         public FuelEngine MotorcycleEngine
         {
             get
@@ -18,6 +18,7 @@ namespace Engine
         public FuelMotorcycle(string i_LicenseNumber, int i_NumberOfTires, float i_TiresMaxAirPressure) : base(i_LicenseNumber, i_NumberOfTires, i_TiresMaxAirPressure)
         {
             r_MotorcycleEngine = new FuelEngine(FuelEngine.eVehicleFuelType.Octan98, 6, 0);
+            //AddParams();
         }
 
         public FuelMotorcycle(List<string> i_CommonVehicleInfo,
@@ -59,8 +60,10 @@ namespace Engine
         public override void AddParams()
         {
             base.AddParams();
-            //r_VehicleRequiredProperties.  (r_CarEngine.AddParams());
-            // TODO: add the engine to the params
+            Property property = new Property("Current amount of fuel", "r_MotorcycleEngine.m_CurrentFuelCapacity", typeof(float));
+            property.FormQuestion = "Enter the current amount of fuel of the motorcycle:";
+            string name = r_MotorcycleEngine.GetType().Name; //TODO fine if it return r_MotorcycleEngine
+            r_VehicleRequiredProperties.Add("r_MotorcycleEngine.m_CurrentFuelCapacity", property);
         }
 
         public override List<string> ListOfQuestions()
@@ -82,6 +85,20 @@ namespace Engine
             {
                 //0 -module, 1- tire manufacture, 2-air pressure
                 //read 2
+            }
+        }
+
+        internal override void UpdateParameter(object i_ParsedUserInput, string i_MemberName)
+        {
+            switch (i_MemberName)
+            {
+                case "r_MotorcycleEngine.m_CurrentFuelCapacity": //m_CurrentFuelCapacity
+                    r_MotorcycleEngine.CurrentFuelCapacity = (float)i_ParsedUserInput; //TODO not readonly anymore think how to do full engine
+                    EnergyPercentageMeter = r_MotorcycleEngine.CurrentFuelCapacity / r_MotorcycleEngine.MaxFuelCapacity;
+                    break;
+                default:
+                    base.UpdateParameter(i_ParsedUserInput, i_MemberName);
+                    break;
             }
         }
     }

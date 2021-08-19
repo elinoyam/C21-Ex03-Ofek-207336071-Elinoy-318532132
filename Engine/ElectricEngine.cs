@@ -25,9 +25,9 @@ namespace Engine
 
             set
             {
-                if (m_BatteryTimeRemainingInHours > r_MaxBatteryTimeInHours)
+                if (value > r_MaxBatteryTimeInHours)
                 {
-                    throw new ValueOutOfRangeException(r_MaxBatteryTimeInHours, 0, "The given amount of time of remaining electricity in the battery is more than the maximum hours of the battery."); //TODO look at it again
+                    throw new ValueOutOfRangeException(r_MaxBatteryTimeInHours, 0, $"The given amount of time of remaining electricity in the battery is more than the {r_MaxBatteryTimeInHours} maximum hours of the battery."); //TODO look at it again
                 }
 
                 m_BatteryTimeRemainingInHours = value;

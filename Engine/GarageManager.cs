@@ -7,15 +7,24 @@ namespace Engine
     public class GarageManager
     {
         private readonly Dictionary<string, GarageCard> m_VehiclesInGarage = new Dictionary<string, GarageCard>();
-        
-        public List<string> InsertNewVehicleToGarage(eAvailableTypesOfVehicles i_VehicleType, string str)
+
+        public Dictionary<string, Property> InsertNewVehicleToGarage(eAvailableTypesOfVehicles i_VehicleType, string i_LicenseNumber, List<string> i_OwnerVehicleInfo)
+        {
+            Vehicle newVehicle = MakeNewVehicle(i_VehicleType, i_LicenseNumber);
+            GarageCard newVehicleCard = new GarageCard(i_OwnerVehicleInfo, newVehicle);
+            m_VehiclesInGarage.Add(i_LicenseNumber, newVehicleCard);
+
+            return newVehicle.Dictionary;
+        }
+
+        /*public List<string> InsertNewVehicleToGarage(eAvailableTypesOfVehicles i_VehicleType, string str)
         {
             Vehicle v = MakeNewVehicle(i_VehicleType, str);
 
             return v.ListOfQuestions();
-        }
+        }*/
 
-        public bool InsertNewVehicleToGarage(eAvailableTypesOfVehicles i_VehicleType, List<string> i_OwnerVehicleInfo,
+        /*public bool InsertNewVehicleToGarage(eAvailableTypesOfVehicles i_VehicleType, List<string> i_OwnerVehicleInfo,
                                              List<string> i_CommonVehicleInfo, List<object> i_CommonTypeOfVehicleInfo, List<object> i_SpecificTypeOfVehicleInfo)
         {
             Vehicle newVehicle = VehicleFactory.CreateNewVehicle(i_VehicleType, i_CommonVehicleInfo,
@@ -28,7 +37,7 @@ namespace Engine
             
 
             return true; //TODO delete after implement
-        }
+        }*/
 
         public bool IsVehicleInGarage(string i_LicenseNumber)
         {
@@ -134,5 +143,19 @@ namespace Engine
             Vehicle vehicle = m_VehiclesInGarage[i_LicenseNumber].OwnerVehicle;
             vehicle.UpdateVehicle(i_SpecificTypeOfVehicleInfo, ref current);
         }
+
+
+        public object TryParseToType(string i_InputFromUser,Type i_Type)
+        {
+            return VehicleFactory.TryParseToType(i_InputFromUser, i_Type);
+        }
+
+
+        public void addParam(string i_LicenseNumber, object i_ParsedUserInput, string i_StringMemberName)
+        {
+            m_VehiclesInGarage[i_LicenseNumber].OwnerVehicle.UpdateParameter(i_ParsedUserInput, i_StringMemberName);
+
+        }
+
     }
 }

@@ -51,8 +51,9 @@ namespace Engine
         public override void AddParams()
         {
             base.AddParams();
-            //r_VehicleRequiredProperties.  (r_CarEngine.AddParams());
-            // TODO: add the engine to the params
+            Property property = new Property("Battery remaining hours", "r_MotorcycleEngine.m_BatteryTimeRemainingInHours", typeof(float));
+            property.FormQuestion = "Enter the current value of battery of the motorcycle:";
+            r_VehicleRequiredProperties.Add("r_MotorcycleEngine.m_BatteryTimeRemainingInHours", property);
         }
 
         public override List<string> ListOfQuestions()
@@ -62,6 +63,20 @@ namespace Engine
             listOfQuestions.AddRange(r_MotorcycleEngine.ListOfQuestions());
 
             return listOfQuestions;
+        }
+
+        internal override void UpdateParameter(object i_ParsedUserInput, string i_MemberName)
+        {
+            switch (i_MemberName)
+            {
+                case "r_MotorcycleEngine.m_BatteryTimeRemainingInHours": //m_CurrentFuelCapacity
+                    r_MotorcycleEngine.BatteryTimeRemainingInHours = (float)i_ParsedUserInput; //TODO not readonly anymore think how to do full engine
+                    EnergyPercentageMeter = r_MotorcycleEngine.BatteryTimeRemainingInHours / r_MotorcycleEngine.MaxBatteryTimeInHours;
+                    break;
+                default:
+                    base.UpdateParameter(i_ParsedUserInput, i_MemberName);
+                    break;
+            }
         }
     }
 }

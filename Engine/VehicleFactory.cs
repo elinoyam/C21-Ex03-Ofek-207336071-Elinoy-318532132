@@ -29,7 +29,7 @@ namespace Engine
                     vehicle = new FuelCar(i_LicenseNumber, 4,32);
                     break;
                 case eAvailableTypesOfVehicles.ElectricMotorcycle:
-                    vehicle = new ElectricMotorcycle(i_LicenseNumber,2,30);
+                    vehicle = new ElectricMotorcycle(i_LicenseNumber,2,30); //TODO const (define)
                     break;
                 case eAvailableTypesOfVehicles.FuelMotorcycle:
                     vehicle = new FuelMotorcycle(i_LicenseNumber, 2,30);
@@ -58,7 +58,7 @@ namespace Engine
 
             float r_MaxAirPressure;
             int r_NumOfTires;
-            int engineCapacity;
+            int engineVolume;
             Motorcycle.eMotorcycleLicenseType motorcycleLicenseType;
 
             Car.eCarColor colorType;
@@ -72,10 +72,10 @@ namespace Engine
                     float maxEngineCapacity = 6;
 
                     tiresList = makeTires(i_CommonVehicleInfo, r_NumOfTires, r_MaxAirPressure);
-                    getMotorcycleDetails(i_CommonTypeOfVehicleInfo, out motorcycleLicenseType, out engineCapacity);
+                    getMotorcycleDetails(i_CommonTypeOfVehicleInfo, out motorcycleLicenseType, out engineVolume);
                     FuelEngine fuelMotorcycleEngine = getFuelEngineDetails(i_SpecificTypeOfVehicleInfo, fuelMotorcycleTypeEngine, maxEngineCapacity, out energyPercentageMeter);
                     newVehicle = new FuelMotorcycle( modelName, licenseNumber, energyPercentageMeter, tiresList,
-                            motorcycleLicenseType, engineCapacity,
+                            motorcycleLicenseType, engineVolume,
                             fuelMotorcycleEngine);
 
                     break;
@@ -86,10 +86,10 @@ namespace Engine
                     float maxElectricCapacity = 1.8f;
 
                     tiresList = makeTires(i_CommonVehicleInfo, r_NumOfTires, r_MaxAirPressure);
-                    getMotorcycleDetails(i_CommonTypeOfVehicleInfo, out motorcycleLicenseType, out engineCapacity);
+                    getMotorcycleDetails(i_CommonTypeOfVehicleInfo, out motorcycleLicenseType, out engineVolume);
                     ElectricEngine ElectricMotorcycleEngine = getElectricEngineDetails(i_SpecificTypeOfVehicleInfo, maxElectricCapacity, out energyPercentageMeter);
                     newVehicle = new ElectricMotorcycle(modelName, licenseNumber, energyPercentageMeter, tiresList,
-                        motorcycleLicenseType, engineCapacity,
+                        motorcycleLicenseType, engineVolume,
                         ElectricMotorcycleEngine);
                     break;
 
@@ -252,6 +252,84 @@ namespace Engine
             {
                 throw new FormatException("Number of doors needs to be a int number");
             }
+        }
+
+        public static object TryParseToType(string i_InputFromUser, Type i_Type)
+        {
+            bool goodInput;
+            object resultObject = new object();
+
+            if (i_Type == typeof(int))
+            {
+                int integerNumber;
+                goodInput = int.TryParse(i_InputFromUser, out integerNumber);
+                if (!goodInput)
+                {
+                    throw new FormatException("You need to enter an integer number only!");
+                }
+
+                resultObject = integerNumber;
+            }
+            else if (i_Type == typeof(float))
+            {
+                float floatNumber;
+                goodInput = float.TryParse(i_InputFromUser, out floatNumber);
+                if (!goodInput)
+                {
+                    throw new FormatException("You need to enter an decimal number only!");
+                }
+
+                resultObject = floatNumber;
+            }
+            else if (i_Type == typeof(string))
+            {
+                if(i_InputFromUser.Equals(""))
+                {
+                    throw new ArgumentException("You can't enter an empty input.");
+                }
+                resultObject = i_InputFromUser;
+            }
+            else if (i_Type.BaseType == typeof(Enum))
+            {
+                int enumNumber;
+                goodInput = int.TryParse(i_InputFromUser, out enumNumber);
+                if (!Enum.IsDefined(i_Type, enumNumber)) // TODO check if 0 is valid|| enumNumber == 0 and if enum not allowed here
+                {
+                    int statingIndex = (int)Enum.GetValues(i_Type).GetValue(0);
+                    int endingIndex = (int)Enum.GetValues(i_Type).GetValue(Enum.GetValues(i_Type).Length);
+
+                    throw new FormatException($"You need to enter an integer number only from the range {statingIndex} to {endingIndex}!"); //TODO add range
+                }
+
+                resultObject = enumNumber;
+            }
+            else if (i_Type == typeof(bool))
+            {
+                bool boolType;
+                int boolInNumber; // 1-True, 0-False TODO check this again in UI
+                goodInput = int.TryParse(i_InputFromUser, out boolInNumber);
+                if (!goodInput)
+                {
+                    throw new FormatException("You need to enter an integer number only! (1 for yes or 0 for no)");
+                }
+
+                if(boolInNumber == 1)
+                {
+                    boolType = true;
+                }
+                else if (boolInNumber == 0)
+                {
+                    boolType = false;
+                }
+                else
+                {
+                    throw new FormatException("You need to enter only 1 for yes or 0 for no");
+                }
+
+                resultObject = boolType;
+            }
+
+            return resultObject;
         }
 
     }

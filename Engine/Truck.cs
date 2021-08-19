@@ -24,6 +24,11 @@ namespace Engine
             {
                 return m_IsCarryingDangerousMaterials;
             }
+
+            set
+            {
+                m_IsCarryingDangerousMaterials = value;
+            }
         }
 
         public float MaxCarryingWeight
@@ -71,7 +76,9 @@ namespace Engine
             Property propertyMaxCarryWeight = new Property("Truck maximum carry weight", "m_MaxCarryingWeight", typeof(float));
             propertyMaxCarryWeight.FormQuestion = "Enter your maximum carry weight:";
             r_VehicleRequiredProperties.Add("m_MaxCarryingWeight", propertyMaxCarryWeight);
-            // TODO: add the engine to the params
+            Property property = new Property("Current amount of fuel", "r_TruckFuelEngine.m_CurrentFuelCapacity", typeof(float));
+            property.FormQuestion = "Enter the current amount of fuel of the Truck:";
+            r_VehicleRequiredProperties.Add("r_TruckFuelEngine.m_CurrentFuelCapacity", property);
         }
 
         public override List<string> ListOfQuestions()
@@ -81,6 +88,26 @@ namespace Engine
             listOfQuestions.AddRange(r_TruckFuelEngine.ListOfQuestions());
 
             return listOfQuestions;
+        }
+
+        internal override void UpdateParameter(object i_ParsedUserInput, string i_MemberName)
+        {
+            switch (i_MemberName)
+            {
+                case "m_IsCarryingDangerousMaterials":
+                    IsCarryingDangerousMaterials = (bool)i_ParsedUserInput;
+                    break;
+                case "m_MaxCarryingWeight":
+                    m_MaxCarryingWeight = (float)i_ParsedUserInput;
+                    break;
+                case "r_TruckFuelEngine.m_CurrentFuelCapacity": //m_CurrentFuelCapacity
+                    r_TruckFuelEngine.CurrentFuelCapacity = (int)i_ParsedUserInput; //TODO not readonly anymore think how to do full engine
+                    EnergyPercentageMeter = r_TruckFuelEngine.CurrentFuelCapacity / r_TruckFuelEngine.MaxFuelCapacity;
+                    break;
+                default:
+                    base.UpdateParameter(i_ParsedUserInput, i_MemberName);
+                    break;
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Engine
     public class Motorcycle : Vehicle
     {
         private eMotorcycleLicenseType m_LicenseType;                                                                                                                                      
-        private int m_EngineCapacity;
+        private int m_EngineVolume;
 
         public eMotorcycleLicenseType LicenseType
         {
@@ -31,25 +31,25 @@ namespace Engine
             }
         }
 
-        public int EngineCapacity
+        public int EngineVolume
         {
             get
             {
-                return m_EngineCapacity;
+                return m_EngineVolume;
             }
 
             set
             {
                 if(value > 0)
                 {
-                    m_EngineCapacity = value;
+                    m_EngineVolume = value;
                 }
             }
         }
 
         public enum eMotorcycleLicenseType //TODO maybe protected?
         {
-            A,
+            A = 1,
             B1,
             Aa,
             Bb
@@ -57,6 +57,7 @@ namespace Engine
 
         public Motorcycle(string i_LicenseNumber, int i_NumberOfTires, float i_TiresMaxAirPressure) :base(i_LicenseNumber, i_NumberOfTires, i_TiresMaxAirPressure)
         {
+            //AddParams();
         }
 
         public Motorcycle(List<string> i_CommonVehicleInfo, List<object> i_CommonTypeOfVehicleInfo)
@@ -64,13 +65,13 @@ namespace Engine
         {
             //TODO add exceptions
            /* m_LicenseType = (eMotorcycleLicenseType)i_CommonTypeOfVehicleInfo[0];                                                                                                                                      
-            m_EngineCapacity = (int)i_CommonTypeOfVehicleInfo[1];*/
+            m_EngineVolume = (int)i_CommonTypeOfVehicleInfo[1];*/
         }
 
-        public Motorcycle(string i_ModelName, string i_LicenseNumber, float i_EnergyPercentageMeter, List<Tire> i_ListOfTires, eMotorcycleLicenseType i_LicenseType, int i_EngineCapacity) : base(i_ModelName, i_LicenseNumber, i_EnergyPercentageMeter, i_ListOfTires)
+        public Motorcycle(string i_ModelName, string i_LicenseNumber, float i_EnergyPercentageMeter, List<Tire> i_ListOfTires, eMotorcycleLicenseType i_LicenseType, int i_EngineVolume) : base(i_ModelName, i_LicenseNumber, i_EnergyPercentageMeter, i_ListOfTires)
         {
             m_LicenseType = i_LicenseType;
-            m_EngineCapacity = i_EngineCapacity;
+            m_EngineVolume = i_EngineVolume;
         }
 
         public override void AddParams()
@@ -79,9 +80,9 @@ namespace Engine
             Property propertyLicense = new Property("Motorcycle license type", "m_LicenseType", typeof(eMotorcycleLicenseType));
             propertyLicense.FormQuestion = "Enter your type of motorcycle license:";
             r_VehicleRequiredProperties.Add("m_LicenseType", propertyLicense);
-            Property propertyCapacity = new Property("Motorcycle engine capacity", "m_EngineCapacity", typeof(int));
-            propertyCapacity.FormQuestion = "Enter your motorcycle engine capacity:";
-            r_VehicleRequiredProperties.Add("m_EngineCapacity", propertyCapacity);
+            Property propertyCapacity = new Property("Motorcycle engine capacity", "m_EngineVolume", typeof(int));
+            propertyCapacity.FormQuestion = "Enter your motorcycle engine volume:";
+            r_VehicleRequiredProperties.Add("m_EngineVolume", propertyCapacity);
         }
 
         public override List<string> ListOfQuestions()
@@ -124,5 +125,26 @@ namespace Engine
                 //read 2
             }
         }
+
+
+        internal override void UpdateParameter(object i_ParsedUserInput, string i_MemberName)
+        {
+            switch(i_MemberName)
+            {
+                case "m_LicenseType":
+                    m_LicenseType = (eMotorcycleLicenseType)i_ParsedUserInput; //TODO not readonly anymore
+                    break;
+                case "m_EngineVolume":
+                    m_EngineVolume = (int)i_ParsedUserInput;
+                    break;
+
+
+                default:
+                    base.UpdateParameter(i_ParsedUserInput, i_MemberName);
+                    break;
+
+            }
+        }
+
     }
 }

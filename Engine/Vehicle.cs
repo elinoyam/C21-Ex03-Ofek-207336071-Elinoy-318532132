@@ -5,7 +5,7 @@ namespace Engine
 {
     public abstract class Vehicle
     {
-        private /*readonly*/ string r_ModelName;
+        private /*readonly*/ string r_ModelName; //TODO important! change to not readonly by name as well
         private readonly string r_LicenseNumber; 
         private float m_EnergyPercentageMeter = 0;
         private readonly List<Tire> r_ListOfTires;
@@ -49,6 +49,8 @@ namespace Engine
             {
                 r_ListOfTires.Add(new Tire(i_TiresMaxAirPressure));
             }
+
+            AddParams();
         }
 
         public Vehicle(string i_ModelName, string i_LicenseNumber, float i_EnergyPercentageMeter, List<Tire> i_ListOfTires)
@@ -59,11 +61,24 @@ namespace Engine
             r_ListOfTires = i_ListOfTires; // TODO check if I can get list in ctor..
         }
 
+        public Dictionary<string, Property> Dictionary //TODO elinoyWillFindBetterName
+        {
+            get
+            {
+                return r_VehicleRequiredProperties;
+            }
+        }
+
         public string ModelName
         {
             get
             {
                 return r_ModelName;
+            }
+
+            set
+            {
+                r_ModelName = value;
             }
         }
 
@@ -121,9 +136,18 @@ namespace Engine
         public virtual void AddParams()
         {
             Property property = new Property("Car model name", "r_ModelName", typeof(string));
-            
-            property.FormQuestion = "Enter the model name of the car:";
+            property.FormQuestion = "Enter the model name of the vehicle:";
             r_VehicleRequiredProperties.Add("r_ModelName", property);
+
+
+            property = new Property("Tire manufacture name", "r_ListOfTires.m_ManufactureName", typeof(string));
+            property.FormQuestion = "Enter the name of the tire manufacture:";
+            r_VehicleRequiredProperties.Add("r_ListOfTires.m_ManufactureName", property);
+
+
+            property = new Property("Tire current air pressure", "r_ListOfTires.m_CurrentAirPressure", typeof(float));
+            property.FormQuestion = "Enter the current air pressure of the tire:";
+            r_VehicleRequiredProperties.Add("r_ListOfTires.m_CurrentAirPressure", property);
         }
 
         public void UpdateParams(Dictionary<string,Property> i_PropertiesToUpdate)
@@ -165,5 +189,39 @@ namespace Engine
             }
             //return
         }
+
+        internal virtual void UpdateParameter(object i_ParsedUserInput, string i_MemberName)
+        {
+            switch(i_MemberName)
+            {
+                case "r_ModelName":
+                    ModelName = (string)i_ParsedUserInput;
+                    break;
+                case "m_EnergyPercentageMeter":
+                    EnergyPercentageMeter = (float)i_ParsedUserInput;
+                    break;
+                case "r_ListOfTires.m_ManufactureName":
+                    Tire tire;
+                    for (int i = 0; i < r_ListOfTires.Count; ++i)
+                    {
+                        tire = r_ListOfTires[i];
+                        tire.ManufactureName = (string)i_ParsedUserInput;
+                        r_ListOfTires[i] = tire;
+                    }
+                    break;
+                case "r_ListOfTires.m_CurrentAirPressure": 
+                    for (int i = 0; i < r_ListOfTires.Count; ++i)
+                    {
+                        tire = r_ListOfTires[i];
+                        tire.CurrentAirPressure = (float)i_ParsedUserInput;
+                        r_ListOfTires[i] = tire;
+                    }
+                    break;
+                default:
+                    //base.UpdateParameter(i_ParsedUserInput, i_MemberName);
+                    break;
+            }
+        }
+
     }
 }

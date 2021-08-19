@@ -18,6 +18,7 @@ namespace Engine
         public FuelCar(string i_LicenseNumber, int i_NumberOfTires, float i_TiresMaxAirPressure) : base(i_LicenseNumber, i_NumberOfTires, i_TiresMaxAirPressure)
         {
             r_CarEngine = new FuelEngine(FuelEngine.eVehicleFuelType.Octan95, 45, 0);
+           // AddParams();
         }
 
         public FuelCar(string i_ModelName, string i_LicenseNumber, float i_EnergyPercentageMeter, List<Tire> i_ListOfTires,
@@ -51,8 +52,9 @@ namespace Engine
         public override void AddParams()
         {
             base.AddParams();
-            //r_VehicleRequiredProperties.  (r_CarEngine.AddParams());
-            // TODO: add the engine to the params
+            Property property = new Property("Current amount of fuel", "r_CarEngine.m_CurrentFuelCapacity", typeof(float));
+            property.FormQuestion = "Enter the current amount of fuel of the car:";
+            r_VehicleRequiredProperties.Add("r_CarEngine.m_CurrentFuelCapacity", property);
         }
 
         public override List<string> ListOfQuestions()
@@ -62,6 +64,20 @@ namespace Engine
             listOfQuestions.AddRange(r_CarEngine.ListOfQuestions());
 
             return listOfQuestions;
+        }
+
+        internal override void UpdateParameter(object i_ParsedUserInput, string i_MemberName)
+        {
+            switch (i_MemberName)
+            {
+                case "r_CarEngine.m_CurrentFuelCapacity": //m_CurrentFuelCapacity
+                    r_CarEngine.CurrentFuelCapacity = (float)i_ParsedUserInput; //TODO not readonly anymore think how to do full engine
+                    EnergyPercentageMeter = r_CarEngine.CurrentFuelCapacity / r_CarEngine.MaxFuelCapacity;
+                    break;
+                default:
+                    base.UpdateParameter(i_ParsedUserInput, i_MemberName);
+                    break;
+            }
         }
     }
 }
