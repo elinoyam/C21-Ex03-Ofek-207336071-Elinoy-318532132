@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Engine
+namespace Ex03.GarageLogic
 {
     public class ElectricCar : Car, IRechargeable
     {

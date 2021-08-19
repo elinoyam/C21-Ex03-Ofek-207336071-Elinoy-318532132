@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Engine
+namespace Ex03.GarageLogic
 {
     public abstract class Car : Vehicle
     {
@@ -90,7 +90,7 @@ namespace Engine
             r_VehicleRequiredPropertiesDictionary.Add("m_CarColor", colorProperty);
             numberOfDoorsProperty.FormQuestion = "Enter your amount of doors:";
             r_VehicleRequiredPropertiesDictionary.Add("m_NumberOfDoors", numberOfDoorsProperty);
-        }
+        }   
 
         internal override void UpdateParameter(object i_ParsedUserInput, string i_MemberName)
         {

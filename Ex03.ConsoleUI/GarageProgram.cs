@@ -1,9 +1,9 @@
-﻿using Engine;
+﻿using Ex03.GarageLogic;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
-using static Engine.VehicleFactory;
+using static Ex03.GarageLogic.VehicleFactory;
 
 namespace Ex03.ConsoleUI
 {
@@ -232,7 +232,15 @@ namespace Ex03.ConsoleUI
                     }
                     else
                     {
-                        Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
+                        if(r_GarageManager.IsGarageEmpty())
+                        {
+                            Console.WriteLine("The garage is empty, try to insert vehicles with option 1 first.");
+                            isSucceeded = true;
+                        }
+                        else
+                        {
+                            Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
+                        }
                     }
                 }
                 catch(Exception ex)
@@ -261,7 +269,15 @@ namespace Ex03.ConsoleUI
                     }
                     else
                     {
-                        Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
+                        if (r_GarageManager.IsGarageEmpty())
+                        {
+                            Console.WriteLine("The garage is empty, try to insert vehicles with option 1 first.");
+                            isSucceeded = true;
+                        }
+                        else
+                        {
+                            Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
+                        }
                     }
                 }
                 catch(Exception ex)
@@ -317,7 +333,15 @@ namespace Ex03.ConsoleUI
                     }
                     else // !r_GarageManager.IsVehicleInGarage(licenseNumber)
                     {
-                        Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
+                        if(r_GarageManager.IsGarageEmpty())
+                        {
+                            Console.WriteLine("The garage is empty, try to insert vehicles with option 1 first.");
+                            isSucceeded = true;
+                        }
+                        else
+                        {
+                            Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
+                        }
                     }
                 }
                 catch(Exception ex)
@@ -359,7 +383,15 @@ namespace Ex03.ConsoleUI
                     }
                     else // !r_GarageManager.IsVehicleInGarage(licenseNumber)
                     {
-                        Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
+                        if(r_GarageManager.IsGarageEmpty())
+                        {
+                            Console.WriteLine("The garage is empty, try to insert vehicles with option 1 first.");
+                            isSucceeded = true;
+                        }
+                        else
+                        {
+                            Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
+                        }
                     }
                 }
                 catch(Exception ex)
@@ -391,7 +423,15 @@ namespace Ex03.ConsoleUI
                     }
                     else
                     {
-                        Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
+                        if(r_GarageManager.IsGarageEmpty())
+                        {
+                            Console.WriteLine("The garage is empty, try to insert vehicles with option 1 first.");
+                            isSucceeded = true;
+                        }
+                        else
+                        {
+                            Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
+                        }
                     }
                 }
                 catch(Exception ex)
@@ -403,7 +443,7 @@ namespace Ex03.ConsoleUI
 
         private void printMainMenu()
         {
-            string mainMenuOptions = "\nPlease select one of the following options (a number between 1-7):\n"
+            string mainMenuOptions = "\nPlease select one of the following options (a number between 1-8):\n"
                                      + "1 - Insert a new vehicle into the garage.\n"
                                      + "2 - Display all the vehicles currently in the garage. (with or without filter by their status)\n"
                                      + "3 - Change a vehicle's status.\n"

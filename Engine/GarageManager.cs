@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using static Engine.VehicleFactory;
+using static Ex03.GarageLogic.VehicleFactory;
 
-namespace Engine
+namespace Ex03.GarageLogic
 {
     public class GarageManager
     {
         private readonly Dictionary<string, GarageCard> r_VehiclesInGarage = new Dictionary<string, GarageCard>();
 
-        public Dictionary<string, Property> InsertNewVehicleToGarage(eAvailableTypesOfVehicles i_VehicleType, string i_LicenseNumber, List<string> i_OwnerVehicleInfo)
+        public Dictionary<string, Property> InsertNewVehicleToGarage(VehicleFactory.eAvailableTypesOfVehicles i_VehicleType, string i_LicenseNumber, List<string> i_OwnerVehicleInfo)
         {
             Vehicle newVehicle = MakeNewVehicle(i_VehicleType, i_LicenseNumber);
             GarageCard newVehicleCard = new GarageCard(i_OwnerVehicleInfo, newVehicle);
@@ -195,6 +195,10 @@ namespace Engine
             }
 
             r_VehiclesInGarage[i_LicensePlateNumber].OwnerVehicle.UpdateParameter(i_ParsedUserInput, i_StringMemberName);
+        }
+        public bool IsGarageEmpty()
+        {
+            return (r_VehiclesInGarage.Count == 0);
         }
     }
 }

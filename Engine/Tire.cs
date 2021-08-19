@@ -1,4 +1,4 @@
-﻿namespace Engine
+﻿namespace Ex03.GarageLogic
 {
     public struct Tire
     {

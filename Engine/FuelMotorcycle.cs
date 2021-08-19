@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Engine
+namespace Ex03.GarageLogic
 {
     public class FuelMotorcycle : Motorcycle, IRefuelable
     {

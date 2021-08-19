@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Engine
+namespace Ex03.GarageLogic
 {
     public class ValueOutOfRangeException : Exception
     {

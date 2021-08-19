@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Engine
+namespace Ex03.GarageLogic
 {
     public class ElectricMotorcycle : Motorcycle, IRechargeable
     {
@@ -39,9 +39,9 @@ namespace Engine
 
         public override string ToString()
         {
-            return $"This is a {ModelName} electric motorcycle with {LicenseNumber} license plate. " +
-                $"The {ListOfTires.Count} {ListOfTires[0].ManufactureName} tires filled with {ListOfTires[0].CurrentAirPressure} air pressure out of {ListOfTires[0].MaxAirPressure}. " +
-                $"The battery status is: {MotorcycleEngine.BatteryTimeRemainingInHours} out of {MotorcycleEngine.MaxBatteryTimeInHours}. ";
+            return $"This is a {ModelName} electric motorcycle with {LicenseNumber} license plate.\n " +
+                $"The {ListOfTires.Count} {ListOfTires[0].ManufactureName} tires filled with {ListOfTires[0].CurrentAirPressure} air pressure out of {ListOfTires[0].MaxAirPressure}.\n " +
+                $"The battery status is: {MotorcycleEngine.BatteryTimeRemainingInHours} out of {MotorcycleEngine.MaxBatteryTimeInHours}.\n ";
         }
 
         public void ReCharge(float i_MinutesToCharge)
