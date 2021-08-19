@@ -102,9 +102,12 @@ namespace Engine
         public void InflateTiresAirToMaximum(string i_LicensePlate)
         {
             Vehicle vehicle = m_VehiclesInGarage[i_LicensePlate].OwnerVehicle;
-            foreach(Tire tire in vehicle.ListOfTires)
+
+            for (int i = 0; i < vehicle.ListOfTires.Count; ++i)
             {
-                tire.TireInflating(tire.MaxAirPressure);
+                Tire tire = vehicle.ListOfTires[i];
+                tire.TireInflating(tire.MaxAirPressure - tire.CurrentAirPressure);
+                vehicle.ListOfTires[i] = tire;
             }
         }
 
