@@ -5,17 +5,18 @@ namespace Engine
 {
     public class FuelEngine
     {
-        public enum eVehicleFuelType
-        {
-            Soler = 0,
-            Octan95 = 1,
-            Octan96 = 2,
-            Octan98 = 3
-        }
-
         private eVehicleFuelType m_VehicleFuelType; 
         private readonly float r_MaxFuelCapacity = 0;
         private float m_CurrentFuelCapacity = 0;
+        private const int k_StartIndexOfEnum = 1;
+
+        public enum eVehicleFuelType
+        {
+            Soler = k_StartIndexOfEnum,
+            Octan95,
+            Octan96,
+            Octan98
+        }
 
         public eVehicleFuelType FuelType
         {
@@ -31,7 +32,8 @@ namespace Engine
                 }
                 else
                 {
-                    throw new ArgumentException("The given value to the engine fuel type is not defined.");                 }
+                    throw new ArgumentException("The given value to the engine fuel type is not defined.");
+                }
             }
         }
 
@@ -49,6 +51,7 @@ namespace Engine
             {
                 return m_CurrentFuelCapacity;
             }
+
             set
             {
                 if (value <= r_MaxFuelCapacity)
@@ -73,26 +76,17 @@ namespace Engine
         {
             if (i_FuelType != m_VehicleFuelType)
             {
-                throw new ArgumentException("The given fuel type is invalid. This car can only be refueled with {m_CarFuelType}.");
+                throw new ArgumentException($"The given fuel type is invalid. This vehicle can only be refueled with {m_VehicleFuelType}.");
             }
-            else if (m_CurrentFuelCapacity + i_FuelAmountToAdd > r_MaxFuelCapacity)
+
+            if (m_CurrentFuelCapacity + i_FuelAmountToAdd > r_MaxFuelCapacity)
             {
-                throw new ValueOutOfRangeException(r_MaxFuelCapacity, 0, "The amount of fuel to add exceeds what is allowed.");
+                throw new ValueOutOfRangeException(r_MaxFuelCapacity, 0, 
+                    $"You tried to refuel the vehicle with {i_FuelAmountToAdd}, but the vehicle already had {m_CurrentFuelCapacity}.\n"
+                    + $"Therefore you passed the maximum engine capacity {r_MaxFuelCapacity}. You can't add that much!");
             }
-            else
-            {
-                CurrentFuelCapacity += i_FuelAmountToAdd;
-            }
-        }
 
-        public List<string> ListOfQuestions()
-        {
-            List<string> listOfQuestions = new List<String>();
-
-            string question = "Please write the current amount of fuel: "; //TODO add print enum colors
-            listOfQuestions.Add(question);
-
-            return listOfQuestions;
+            CurrentFuelCapacity += i_FuelAmountToAdd;
         }
     }
 }

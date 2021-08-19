@@ -44,30 +44,12 @@ namespace Engine
         {
             if (m_BatteryTimeRemainingInHours + i_AmountOfHoursToAdd > r_MaxBatteryTimeInHours)
             {
-                throw new ValueOutOfRangeException(r_MaxBatteryTimeInHours, 0, $"The amount of hours to add exceeds what is allowed in this engine.\nYou can charge only {r_MaxBatteryTimeInHours-m_BatteryTimeRemainingInHours} more hours.");
+                throw new ValueOutOfRangeException(r_MaxBatteryTimeInHours, 0,
+                    $"You tried to recharge the vehicle with {i_AmountOfHoursToAdd}, but the vehicle already had {m_BatteryTimeRemainingInHours}.\n"
+                    + $"Therefore you passed the maximum engine capacity {r_MaxBatteryTimeInHours}. You can't add that much!");
             }
-            else
-            {
-                m_BatteryTimeRemainingInHours += i_AmountOfHoursToAdd;
-            }
-        }
 
-        public Dictionary<string, Property> AddParams()
-        {
-            Dictionary<string, Property> paramsToDictionary = new Dictionary<string, Property>();
-
-            paramsToDictionary.Add("m_BatteryTimeRemainingInHours", new Property("Battery remaining hours", "m_BatteryTimeRemainingInHours", typeof(float)));
-            
-            return paramsToDictionary;
-        }
-        public List<string> ListOfQuestions()
-        {
-            List<string> listOfQuestions = new List<String>();
-
-            string question = "Please write the current value of battery: "; //TODO add print enum colors
-            listOfQuestions.Add(question);
-
-            return listOfQuestions;
+            m_BatteryTimeRemainingInHours += i_AmountOfHoursToAdd;
         }
     }
 }

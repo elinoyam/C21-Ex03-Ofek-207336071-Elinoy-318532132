@@ -6,6 +6,7 @@ namespace Engine
     public class FuelCar : Car, IRefuelable
     {
         private readonly FuelEngine r_CarEngine;
+        private const float k_MaxFuelCapacity = 45f;
 
         public FuelEngine CarEngine
         {
@@ -17,8 +18,7 @@ namespace Engine
 
         public FuelCar(string i_LicenseNumber, int i_NumberOfTires, float i_TiresMaxAirPressure) : base(i_LicenseNumber, i_NumberOfTires, i_TiresMaxAirPressure)
         {
-            r_CarEngine = new FuelEngine(FuelEngine.eVehicleFuelType.Octan95, 45, 0);
-           // AddParams();
+            r_CarEngine = new FuelEngine(FuelEngine.eVehicleFuelType.Octan95, k_MaxFuelCapacity, 0);
         }
 
         public FuelCar(string i_ModelName, string i_LicenseNumber, float i_EnergyPercentageMeter, List<Tire> i_ListOfTires,
@@ -44,34 +44,26 @@ namespace Engine
 
         public override string ToString()
         {
-            return $"This is a {ModelName} fuel car with {LicenseNumber} license plate. " +
-                $" The {ListOfTires.Count} {ListOfTires[0].ManufactureName} tires filled with {ListOfTires[0].CurrentAirPressure} air pressure. " +
-                $"The {CarEngine.FuelType} fuel status is: {CarEngine.CurrentFuelCapacity}. ";
+            return $"This is a {ModelName} fuel car with {LicenseNumber} license plate.\n" +
+                $"The {ListOfTires.Count} {ListOfTires[0].ManufactureName} tires filled with {ListOfTires[0].CurrentAirPressure} air pressure out of {ListOfTires[0].MaxAirPressure}.\n" +
+                $"The {CarEngine.FuelType} fuel status is: {CarEngine.CurrentFuelCapacity} out of {CarEngine.MaxFuelCapacity}.\n";
         }
 
         public override void AddParams()
         {
             base.AddParams();
-            Property property = new Property("Current amount of fuel", "r_CarEngine.m_CurrentFuelCapacity", typeof(float));
-            property.FormQuestion = "Enter the current amount of fuel of the car:";
-            r_VehicleRequiredProperties.Add("r_CarEngine.m_CurrentFuelCapacity", property);
-        }
+            Property fuelAmountProperty = new Property("Current amount of fuel", "r_CarEngine.m_CurrentFuelCapacity", typeof(float));
 
-        public override List<string> ListOfQuestions()
-        {
-            List<string> listOfQuestions = base.ListOfQuestions();
-
-            listOfQuestions.AddRange(r_CarEngine.ListOfQuestions());
-
-            return listOfQuestions;
+            fuelAmountProperty.FormQuestion = "Enter the current amount of fuel of the car:";
+            r_VehicleRequiredPropertiesDictionary.Add("r_CarEngine.m_CurrentFuelCapacity", fuelAmountProperty);
         }
 
         internal override void UpdateParameter(object i_ParsedUserInput, string i_MemberName)
         {
             switch (i_MemberName)
             {
-                case "r_CarEngine.m_CurrentFuelCapacity": //m_CurrentFuelCapacity
-                    r_CarEngine.CurrentFuelCapacity = (float)i_ParsedUserInput; //TODO not readonly anymore think how to do full engine
+                case "r_CarEngine.m_CurrentFuelCapacity": 
+                    r_CarEngine.CurrentFuelCapacity = (float)i_ParsedUserInput; 
                     EnergyPercentageMeter = r_CarEngine.CurrentFuelCapacity / r_CarEngine.MaxFuelCapacity;
                     break;
                 default:

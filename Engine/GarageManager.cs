@@ -6,49 +6,28 @@ namespace Engine
 {
     public class GarageManager
     {
-        private readonly Dictionary<string, GarageCard> m_VehiclesInGarage = new Dictionary<string, GarageCard>();
+        private readonly Dictionary<string, GarageCard> r_VehiclesInGarage = new Dictionary<string, GarageCard>();
 
         public Dictionary<string, Property> InsertNewVehicleToGarage(eAvailableTypesOfVehicles i_VehicleType, string i_LicenseNumber, List<string> i_OwnerVehicleInfo)
         {
             Vehicle newVehicle = MakeNewVehicle(i_VehicleType, i_LicenseNumber);
             GarageCard newVehicleCard = new GarageCard(i_OwnerVehicleInfo, newVehicle);
-            m_VehiclesInGarage.Add(i_LicenseNumber, newVehicleCard);
 
-            return newVehicle.Dictionary;
+            r_VehiclesInGarage.Add(i_LicenseNumber, newVehicleCard);
+
+            return newVehicle.VehicleRequiredPropertiesDictionary;
         }
-
-        /*public List<string> InsertNewVehicleToGarage(eAvailableTypesOfVehicles i_VehicleType, string str)
-        {
-            Vehicle v = MakeNewVehicle(i_VehicleType, str);
-
-            return v.ListOfQuestions();
-        }*/
-
-        /*public bool InsertNewVehicleToGarage(eAvailableTypesOfVehicles i_VehicleType, List<string> i_OwnerVehicleInfo,
-                                             List<string> i_CommonVehicleInfo, List<object> i_CommonTypeOfVehicleInfo, List<object> i_SpecificTypeOfVehicleInfo)
-        {
-            Vehicle newVehicle = VehicleFactory.CreateNewVehicle(i_VehicleType, i_CommonVehicleInfo,
-                i_CommonTypeOfVehicleInfo, i_SpecificTypeOfVehicleInfo);
-
-            // create garage card
-            GarageCard newVehicleCard = new GarageCard(i_OwnerVehicleInfo, newVehicle); 
-            //license = i_CommonVehicleInfo[0]
-            m_VehiclesInGarage.Add(i_CommonVehicleInfo[0], newVehicleCard);
-            
-
-            return true; //TODO delete after implement
-        }*/
 
         public bool IsVehicleInGarage(string i_LicenseNumber)
         {
-            return m_VehiclesInGarage.ContainsKey(i_LicenseNumber);
+            return r_VehiclesInGarage.ContainsKey(i_LicenseNumber);
         }
 
         public List<string> GetLicensePlateInGarage()
         {
             List<string> licensePlatesList = new List<string>();
 
-            foreach(GarageCard gc in m_VehiclesInGarage.Values)
+            foreach(GarageCard gc in r_VehiclesInGarage.Values)
             {
                 licensePlatesList.Add(gc.OwnerVehicle.LicenseNumber);
             }
@@ -58,23 +37,39 @@ namespace Engine
 
         public List<string> GetLicensePlateInGarage(string i_VehicleState)
         {
-            GarageCard.eVehicleState vehicleState;
+            GarageCard.eVehicleState vehicleState = GarageCard.eVehicleState.InRepair;
             List<string> licensePlatesList = new List<string>();
+            bool goodInput = false;
+            int enumNumber;
 
-            bool goodInput = Enum.TryParse(i_VehicleState, out vehicleState);
+            goodInput = int.TryParse(i_VehicleState, out enumNumber);
 
-            if (goodInput) { 
-                foreach(GarageCard gc in m_VehiclesInGarage.Values)
+            if(goodInput)
+            {
+                goodInput = false;
+                if (Enum.IsDefined(typeof(GarageCard.eVehicleState), enumNumber))
                 {
-                    if(gc.VehicleCurrentState == vehicleState)
+                    goodInput = Enum.TryParse(i_VehicleState, out vehicleState);
+                }
+
+                if(goodInput)
+                {
+                    foreach(GarageCard gc in r_VehiclesInGarage.Values)
                     {
-                        licensePlatesList.Add(gc.OwnerVehicle.LicenseNumber);
+                        if(gc.VehicleCurrentState == vehicleState)
+                        {
+                            licensePlatesList.Add(gc.OwnerVehicle.LicenseNumber);
+                        }
                     }
+                }
+                else
+                {
+                    throw new FormatException("The status you entered is not a valid status in this garage.");
                 }
             }
             else
             {
-                throw new FormatException("The status you entered is not a valid status.");
+                throw new FormatException("The status you entered is not a valid status in this garage.");
             }
 
             return licensePlatesList;
@@ -82,27 +77,61 @@ namespace Engine
 
         public void ChangeVehicleStatus(string i_LicensePlateNumber, GarageCard.eVehicleState i_NewVehicleState)
         {
-            GarageCard garageCard = m_VehiclesInGarage[i_LicensePlateNumber];
-            garageCard.VehicleCurrentState = i_NewVehicleState;
+            if(IsVehicleInGarage(i_LicensePlateNumber))
+            {
+                r_VehiclesInGarage[i_LicensePlateNumber].VehicleCurrentState = i_NewVehicleState;
+            }
+            else
+            {
+                throw new ArgumentException("The given license plate number doesn't exists in the garage system.");
+            }
         }
 
         public void ChangeVehicleStatus(string i_LicensePlateNumber, string i_NewVehicleState)
         {
             GarageCard.eVehicleState newState;
-            bool goodInput;
+            bool isGoodInput;
+            GarageCard garageCard;
+            int enumNumber;
 
-            GarageCard garageCard = m_VehiclesInGarage[i_LicensePlateNumber];
-            goodInput = GarageCard.eVehicleState.TryParse(i_NewVehicleState,out newState);
-            if (goodInput)
+            if (IsVehicleInGarage(i_LicensePlateNumber))
             {
-                garageCard.VehicleCurrentState = newState;
+                isGoodInput = int.TryParse(i_NewVehicleState, out enumNumber);
+                if(isGoodInput)
+                {
+                    garageCard = r_VehiclesInGarage[i_LicensePlateNumber];
+                    if(Enum.IsDefined(typeof(GarageCard.eVehicleState), enumNumber)) 
+                    {
+                        isGoodInput = Enum.TryParse(i_NewVehicleState, out newState);
+                        if(isGoodInput)
+                        {
+                            garageCard.VehicleCurrentState = newState;
+                        }
+                    }
+                    else
+                    {
+                        throw new FormatException("The status you entered is not a valid status in this garage.");
+                    }
+                }
+                else
+                {
+                    throw new FormatException("The status you entered is not a valid status in this garage.");
+                }
+            }
+            else
+            {
+                throw new ArgumentException("The given license plate number doesn't exists in the garage system.");
             }
         }
 
-        public void InflateTiresAirToMaximum(string i_LicensePlate)
+        public void InflateTiresAirToMaximum(string i_LicensePlateNumber)
         {
-            Vehicle vehicle = m_VehiclesInGarage[i_LicensePlate].OwnerVehicle;
-
+            if(!IsVehicleInGarage(i_LicensePlateNumber))
+            {
+                throw new ArgumentException("The given license plate number doesn't exists in the garage system.");
+            }
+            
+            Vehicle vehicle = r_VehiclesInGarage[i_LicensePlateNumber].OwnerVehicle;
             for (int i = 0; i < vehicle.ListOfTires.Count; ++i)
             {
                 Tire tire = vehicle.ListOfTires[i];
@@ -113,52 +142,59 @@ namespace Engine
 
         public void ChargeElectricVehicle(string i_LicensePlate, float i_MinutesToCharge)
         {
-            IRechargable vehicle = m_VehiclesInGarage[i_LicensePlate].OwnerVehicle as IRechargable;
+            IRechargeable vehicle = r_VehiclesInGarage[i_LicensePlate].OwnerVehicle as IRechargeable;
 
             if(vehicle != null)
             {
                 vehicle.ReCharge(i_MinutesToCharge);
+            }
+            else
+            {
+                throw new ArgumentException("The given vehicle isn't electric.");
             }
         }
 
         public void RefuelFuelVehicle(string i_LicensePlateNumber, string i_FuelType, float i_AmountToFill)
         {
             FuelEngine.eVehicleFuelType fuelType;
-            bool goodInput = FuelEngine.eVehicleFuelType.TryParse(i_FuelType, out fuelType);
-
-            IRefuelable vehicle = m_VehiclesInGarage[i_LicensePlateNumber].OwnerVehicle as IRefuelable;
+            bool goodInput = Enum.TryParse(i_FuelType, out fuelType);
+            IRefuelable vehicle = r_VehiclesInGarage[i_LicensePlateNumber].OwnerVehicle as IRefuelable;
+            
             if (vehicle != null)
             {
                 vehicle.Refuel(fuelType, i_AmountToFill);
             }
+            else
+            {
+                throw new ArgumentException("The given vehicle doesn't work on fuel.");
+            }
         }
 
-        public string GetVehicleDetails(string i_LicensePlate)
+        public string GetVehicleDetails(string i_LicensePlateNumber)
         {
-            Vehicle vehicle = m_VehiclesInGarage[i_LicensePlate].OwnerVehicle;
+            if (!IsVehicleInGarage(i_LicensePlateNumber))
+            {
+                throw new ArgumentException("The given license plate number doesn't exists in the garage system.");
+            }
+
+            Vehicle vehicle = r_VehiclesInGarage[i_LicensePlateNumber].OwnerVehicle;
 
             return vehicle.ToString();
         }
-
-        public void UpdateVehicle(string i_LicenseNumber,List<string> i_SpecificTypeOfVehicleInfo)
-        {
-            int current = 0;
-            Vehicle vehicle = m_VehiclesInGarage[i_LicenseNumber].OwnerVehicle;
-            vehicle.UpdateVehicle(i_SpecificTypeOfVehicleInfo, ref current);
-        }
-
 
         public object TryParseToType(string i_InputFromUser,Type i_Type)
         {
             return VehicleFactory.TryParseToType(i_InputFromUser, i_Type);
         }
 
-
-        public void addParam(string i_LicenseNumber, object i_ParsedUserInput, string i_StringMemberName)
+        public void addParam(string i_LicensePlateNumber, object i_ParsedUserInput, string i_StringMemberName)
         {
-            m_VehiclesInGarage[i_LicenseNumber].OwnerVehicle.UpdateParameter(i_ParsedUserInput, i_StringMemberName);
+            if (!IsVehicleInGarage(i_LicensePlateNumber))
+            {
+                throw new ArgumentException("The given license plate number doesn't exists in the garage system.");
+            }
 
+            r_VehiclesInGarage[i_LicensePlateNumber].OwnerVehicle.UpdateParameter(i_ParsedUserInput, i_StringMemberName);
         }
-
     }
 }

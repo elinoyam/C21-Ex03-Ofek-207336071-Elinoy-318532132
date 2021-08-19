@@ -11,18 +11,32 @@ namespace Ex03.ConsoleUI
     {
         private readonly GarageManager r_GarageManager = new GarageManager();
         private bool m_GameLoop = true;
+        private const int k_StartIndexOfEnum = 1;
 
-        public void RunForestRun()
+        public enum eMainMenuOptions
+        {
+            Option1 = k_StartIndexOfEnum,
+            Option2,
+            Option3,
+            Option4,
+            Option5,
+            Option6,
+            Option7,
+            Option8
+        }
+
+        public void StartProgram()
         {
             string inputFromUser;
-            bool goodInput = false;
+            bool goodInput;
             eMainMenuOptions UserChoiceWhatToDo;
 
-            while(m_GameLoop) 
+            Console.WriteLine("Welcome, thanks for choosing our Garage Factory program! we know you had a lot of choices.. Good Luck! (=");
+            while (m_GameLoop) 
             {
-                PrintMainMenu();
+                printMainMenu();
                 inputFromUser = Console.ReadLine();
-                goodInput = eMainMenuOptions.TryParse(inputFromUser, out UserChoiceWhatToDo);
+                goodInput = Enum.TryParse(inputFromUser, out UserChoiceWhatToDo);
                 if(goodInput)
                 {
                     switch(UserChoiceWhatToDo)
@@ -63,173 +77,331 @@ namespace Ex03.ConsoleUI
             }
         }
 
-        public void ChangeVehicleStatus()
+        public void InsertNewVehicleToGarage()       // Option 1 in main menu 
         {
+            bool isNeededToBeNumber;
             string licenseNumber, inputFromUser;
+            eAvailableTypesOfVehicles vehicleType;
+            List<string> ownerVehicleInfo = new List<string>();
+            Dictionary<string, Property> vehiclePropertiesDictionary = null;
 
-            Console.WriteLine("Enter license plate number:");
-            licenseNumber = Console.ReadLine();
-            Console.WriteLine("Enter the new status:");
-            PrintEnumOptions(typeof(GarageCard.eVehicleState));
-            inputFromUser = Console.ReadLine();
-            try 
-            { 
-                if (r_GarageManager.IsVehicleInGarage(licenseNumber))
-                {
-                    r_GarageManager.ChangeVehicleStatus(licenseNumber, inputFromUser);
-                }
-                else 
-                {
-                    Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
-                }
-            }
-            catch(Exception ex)
+            Console.WriteLine("Please write the license number: ");
+            isNeededToBeNumber = false;
+            licenseNumber = getValidInput(isNeededToBeNumber);
+            if (!r_GarageManager.IsVehicleInGarage(licenseNumber))
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("Please write the owner name: ");
+                isNeededToBeNumber = false;
+                inputFromUser = getValidInput(isNeededToBeNumber);
+                ownerVehicleInfo.Add(inputFromUser);
+                Console.WriteLine("Please write the owner phone number: ");
+                isNeededToBeNumber = true;
+                inputFromUser = getValidInput(isNeededToBeNumber);
+                ownerVehicleInfo.Add(inputFromUser);
+                Console.WriteLine("Please select the type of the vehicle? (select the number next to the type)");
+                PrintEnumOptions(typeof(eAvailableTypesOfVehicles));
+                vehicleType = getValidInputToTypesOfVehicles();
+                vehiclePropertiesDictionary = r_GarageManager.InsertNewVehicleToGarage(vehicleType, licenseNumber, ownerVehicleInfo);
+                foreach (KeyValuePair<string, Property> key in vehiclePropertiesDictionary)
+                {
+                    bool good = false;
+                    while (!good)
+                        try
+                        {
+                            Console.WriteLine(key.Value.FormQuestion);
+                            if (key.Value.MemberType.BaseType == typeof(Enum))
+                            {
+                                PrintEnumOptions(key.Value.MemberType);
+                            }
+
+                            inputFromUser = Console.ReadLine();
+                            object parsedUserInput = r_GarageManager.TryParseToType(inputFromUser, key.Value.MemberType);
+                            // if I'm here I didn't throw exception so the type is good
+                            r_GarageManager.addParam(licenseNumber, parsedUserInput, key.Value.MemberName);
+                            good = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("ERROR!!");
+                            Console.WriteLine(ex.Message);
+                            Console.WriteLine("Try again...\n");
+                        }
+                }
+
+                Console.WriteLine("Congratulations! you created a new vehicle!\n");
+            }
+            else    // vehicle in the garage
+            {
+                r_GarageManager.ChangeVehicleStatus(licenseNumber, GarageCard.eVehicleState.InRepair);
+                Console.WriteLine("The vehicle is already in the system.");
             }
         }
 
-        public void InflateVehicleTires()
-        {
-            string licenseNumber;
-
-            Console.WriteLine("Enter license plate number:");
-            licenseNumber = Console.ReadLine();
-            try
-            {
-                if (r_GarageManager.IsVehicleInGarage(licenseNumber))
-                {
-                    r_GarageManager.InflateTiresAirToMaximum(licenseNumber);
-                    Console.WriteLine("The vehicle tires has been inflated to maximum air pressure.");
-                }
-                else
-                {
-                    Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                Console.WriteLine("");
-            }
-        }
-
-        public void ShowLicensePlateOfVehiclesInGarage()
+        public void ShowLicensePlateOfVehiclesInGarage()       // Option 2 in main menu
         {
             int userChoice;
             string inputFromUser;
-            bool goodInput;
+            bool isGoodInput;
             List<string> listToPrintInGarage;
+            bool isSucceeded = false;
 
-            Console.WriteLine("Choose which license plate to show: (1 - Show All, 2 - Filter status)");
-            inputFromUser = Console.ReadLine();
-            goodInput = int.TryParse(inputFromUser, out userChoice);
-            if (goodInput)
+            while(!isSucceeded)
             {
-                if(userChoice == 1)
+                try
                 {
-                    Console.WriteLine("All The vehicles in the garage are:");
-                    listToPrintInGarage = r_GarageManager.GetLicensePlateInGarage();
-                    foreach (string licensePlateNumber in listToPrintInGarage)
+                    Console.WriteLine("Choose which licenses plate to show: (1 - Show All, 2 - Filter status)");
+                    inputFromUser = Console.ReadLine();
+                    isGoodInput = int.TryParse(inputFromUser, out userChoice);
+                    if(isGoodInput)
                     {
-                        Console.WriteLine(licensePlateNumber);
+                        if(userChoice == 1)
+                        {
+                            listToPrintInGarage = r_GarageManager.GetLicensePlateInGarage();
+                            if(listToPrintInGarage.Count == 0)
+                            {
+                                Console.WriteLine("There isn't any vehicles in the system");
+                            }
+                            else
+                            {
+                                Console.WriteLine("All The vehicles in the garage are:");
+                                foreach (string licensePlateNumber in listToPrintInGarage)
+                                {
+                                    Console.WriteLine(licensePlateNumber);
+                                }
+                            }
+
+                            isSucceeded = true;
+                        }
+                        else if(userChoice == 2)
+                        {
+                            Console.WriteLine("Choose which status plate you want to show:");
+                            PrintEnumOptions(typeof(GarageCard.eVehicleState));
+                            inputFromUser = Console.ReadLine();
+                            listToPrintInGarage = r_GarageManager.GetLicensePlateInGarage(inputFromUser);
+                            if (listToPrintInGarage.Count == 0)
+                            {
+                                Console.WriteLine("There isn't any vehicles with the requested status in the system");
+                            }
+                            else
+                            {
+                                Console.WriteLine("All the vehicle with the requested status in the garage are:");
+                                foreach(string licensePlateNumber in listToPrintInGarage)
+                                {
+                                    Console.WriteLine(licensePlateNumber);
+                                }
+                            }
+
+                            isSucceeded = true;
+                        }
+                        else
+                        {
+                            Console.WriteLine("You entered an invalid option, pay attention to the instructions");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("You need to insert only an integer number! only 1 or 2");
                     }
                 }
-                else if(userChoice == 2)
+                catch(Exception ex)
                 {
-                    Console.WriteLine("Choose which status plate you want to show:");
-                    PrintEnumOptions(typeof(GarageCard.eVehicleState));
-                    inputFromUser = Console.ReadLine();
-                    listToPrintInGarage = r_GarageManager.GetLicensePlateInGarage(inputFromUser);
-                    Console.WriteLine("All the vehicle is the requested status in the garage are:");
-                    foreach (string licensePlateNumber in listToPrintInGarage)
-                    {
-                        Console.WriteLine(licensePlateNumber);
-                    }
+                    Console.WriteLine(ex.Message);
                 }
             }
         }
 
-        public void RefuelVehicle()
+        public void ChangeVehicleStatus()       // Option 3 in main menu
+        {
+            string licenseNumber, inputFromUser;
+            bool isSucceeded = false;
+
+            while(!isSucceeded)
+            {
+                Console.WriteLine("Enter license plate number:");
+                licenseNumber = Console.ReadLine();
+                try
+                {
+                    if(r_GarageManager.IsVehicleInGarage(licenseNumber))
+                    {
+                        Console.WriteLine("Enter the new status:");
+                        PrintEnumOptions(typeof(GarageCard.eVehicleState));
+                        inputFromUser = Console.ReadLine();
+                        r_GarageManager.ChangeVehicleStatus(licenseNumber, inputFromUser);
+                        Console.WriteLine("The status of the vehicle has been changed!");
+                       isSucceeded = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+
+        public void InflateVehicleTires()       // Option 4 in main menu
+        {
+            string licenseNumber; 
+            bool isSucceeded = false;
+
+            while(!isSucceeded)
+            {
+                Console.WriteLine("Enter license plate number:");
+                licenseNumber = Console.ReadLine();
+                try
+                {
+                    if(r_GarageManager.IsVehicleInGarage(licenseNumber))
+                    {
+                        r_GarageManager.InflateTiresAirToMaximum(licenseNumber);
+                        Console.WriteLine("The vehicle tires has been inflated to maximum air pressure.");
+                        isSucceeded = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+
+        public void RefuelVehicle()       // Option 5 in main menu
         {
             float amountToRefuel;
             string fuelType,licenseNumber, inputFromUser;
-            bool goodInput;
+            bool goodInput,isSucceeded = false;
+            int enumNumber;
 
-            Console.WriteLine("Enter license plate number:");
-            licenseNumber = Console.ReadLine();
-            Console.WriteLine("Enter the amount to refuel:");
-            inputFromUser = Console.ReadLine();
-            goodInput = float.TryParse(inputFromUser, out amountToRefuel);
-            Console.WriteLine("Enter the type of fuel:");
-            PrintEnumOptions(typeof(FuelEngine.eVehicleFuelType));
-            fuelType = Console.ReadLine();
-            if (goodInput && r_GarageManager.IsVehicleInGarage(licenseNumber))
+            while (!isSucceeded)
             {
-                r_GarageManager.RefuelFuelVehicle(licenseNumber, fuelType, amountToRefuel);
-                Console.WriteLine("The vehicle has been refueled!\n");
-            }
-            else if (!goodInput)
-            {
-                Console.WriteLine("You can refuel only decimal number.");
-            }
-            else // !r_GarageManager.IsVehicleInGarage(licenseNumber)
-            {
-                Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
+                try
+                {
+                    Console.WriteLine("Enter license plate number:");
+                    licenseNumber = Console.ReadLine();
+                    if(r_GarageManager.IsVehicleInGarage(licenseNumber))
+                    {
+                        Console.WriteLine("Enter the type of fuel:");
+                        PrintEnumOptions(typeof(FuelEngine.eVehicleFuelType));
+                        fuelType = Console.ReadLine();
+                        goodInput = int.TryParse(fuelType, out enumNumber);
+                        if(goodInput)
+                        {
+                            goodInput = false;
+                            if(Enum.IsDefined(typeof(FuelEngine.eVehicleFuelType), enumNumber))
+                            {
+                                Console.WriteLine("Enter the amount to refuel:");
+                                inputFromUser = Console.ReadLine();
+                                goodInput = float.TryParse(inputFromUser, out amountToRefuel);
+                                if (goodInput)
+                                {
+                                    r_GarageManager.RefuelFuelVehicle(licenseNumber, fuelType, amountToRefuel);
+                                    Console.WriteLine("The vehicle has been refueled!\n");
+                                    isSucceeded = true;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("You can refuel only decimal number.");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("You entered an invalid option, pay attention to the instructions!");
+                            }
+                        }
+                    }
+                    else // !r_GarageManager.IsVehicleInGarage(licenseNumber)
+                    {
+                        Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    goodInput = false;
+                    isSucceeded = true;
+                }
             }
         }
 
-        public void ChargeElectricVehicle()
+        public void ChargeElectricVehicle()       // Option 6 in main menu
         {
             string inputFromUser, licenseNumber;
             float amountToAdd;
-            bool goodInput;
+            bool goodInput,isSucceeded = false;
 
-            try { 
-                Console.WriteLine("Enter license plate number:");
-                licenseNumber = Console.ReadLine();
-                Console.WriteLine("Enter the hours to charge:");
-                inputFromUser = Console.ReadLine();
-                goodInput = float.TryParse(inputFromUser, out amountToAdd);
-                if (goodInput && r_GarageManager.IsVehicleInGarage(licenseNumber))
-                {
-                    r_GarageManager.ChargeElectricVehicle(licenseNumber, amountToAdd);
-                    Console.WriteLine("The vehicle has been charged!\n");
-                }
-                else if (!goodInput)
-                {
-                    Console.WriteLine("You can charge only decimal number.");
-                }
-                else // !r_GarageManager.IsVehicleInGarage(licenseNumber)
-                {
-                    Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
-                }
-            } 
-            catch(Exception ex)
+            while(!isSucceeded)
             {
-                Console.WriteLine(ex.Message);
+                try
+                {
+                    Console.WriteLine("Enter license plate number:");
+                    licenseNumber = Console.ReadLine();
+                    if(r_GarageManager.IsVehicleInGarage(licenseNumber))
+                    {
+                        Console.WriteLine("Enter the hours to charge:");
+                        inputFromUser = Console.ReadLine();
+                        goodInput = float.TryParse(inputFromUser, out amountToAdd);
+                        if(goodInput)
+                        {
+                            r_GarageManager.ChargeElectricVehicle(licenseNumber, amountToAdd);
+                            Console.WriteLine("The vehicle has been charged!\n");
+                            isSucceeded = true;
+                        }
+                        else if(!goodInput)
+                        {
+                            Console.WriteLine("You can charge only decimal number.");
+                        }
+                    }
+                    else // !r_GarageManager.IsVehicleInGarage(licenseNumber)
+                    {
+                        Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    goodInput = false;
+                    isSucceeded = true;
+                }
             }
         }
 
-        public void ShowVehicleDetails()
+        public void ShowVehicleDetails()       // Option 7 in main menu
         {
             string vehicleDetails, licenseNumber;
+            bool isSucceeded= false;
 
-            Console.WriteLine("Enter license plate number:");
-            licenseNumber = Console.ReadLine();
-            if (r_GarageManager.IsVehicleInGarage(licenseNumber))
+            while(!isSucceeded)
             {
-                vehicleDetails = r_GarageManager.GetVehicleDetails(licenseNumber);
-                Console.WriteLine("The requested vehicle details are:");
-                Console.WriteLine(vehicleDetails);
-            }
-            else
-            {
-                Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
+                try
+                {
+                    Console.WriteLine("Enter license plate number:");
+                    licenseNumber = Console.ReadLine();
+                    if(r_GarageManager.IsVehicleInGarage(licenseNumber))
+                    {
+                        vehicleDetails = r_GarageManager.GetVehicleDetails(licenseNumber);
+                        Console.WriteLine("The requested vehicle details are:");
+                        Console.WriteLine(vehicleDetails);
+                        isSucceeded = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"There isn't any vehicle with {licenseNumber} license plate.");
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
         }
 
-        public void PrintMainMenu()
+        private void printMainMenu()
         {
             string mainMenuOptions = "\nPlease select one of the following options (a number between 1-7):\n"
                                      + "1 - Insert a new vehicle into the garage.\n"
@@ -243,7 +415,7 @@ namespace Ex03.ConsoleUI
             Console.WriteLine(mainMenuOptions);
         }
 
-        public string GetValidInput(bool i_NeedToBeNumber)
+        private string getValidInput(bool i_NeedToBeNumber)
         {
             string input = null;
             bool goodInput = false;
@@ -267,88 +439,35 @@ namespace Ex03.ConsoleUI
                         Console.WriteLine("Try again. can't be an empty line");
                     }
                 }
-
-                
             }
 
             return input;
         }
 
-        public void InsertNewVehicleToGarage()
-        {
-            bool goodInput;
-            bool needsToBeNumber = false;
-            string licenseNumber, inputFromUser;
-            eAvailableTypesOfVehicles vehicleType; 
-            List<string> ownerVehicleInfo = new List<string>(); //Garage ticket
-
-            Console.WriteLine("You chose option 1 to Insert a vehicle to the garage!");
-            //1- string license number (plate?)
-            Console.WriteLine("Please write the license number: ");
-            needsToBeNumber = false;
-            licenseNumber = GetValidInput(needsToBeNumber);
-            if (!r_GarageManager.IsVehicleInGarage(licenseNumber))
-            {
-                Console.WriteLine("Please write the owner name: ");
-                needsToBeNumber = false;
-                inputFromUser = GetValidInput(needsToBeNumber);
-                ownerVehicleInfo.Add(inputFromUser);
-                Console.WriteLine("Please write the owner phone number: ");
-                needsToBeNumber = true;
-                inputFromUser = GetValidInput(needsToBeNumber);
-                ownerVehicleInfo.Add(inputFromUser);
-                Console.WriteLine("Please select the type of the vehicle? (select the number next to the type)");
-                PrintEnumOptions(typeof(eAvailableTypesOfVehicles));
-                vehicleType = GetValidInputToTypesOfVehicles();
-
-                // TODO put in enum and check if it is in the enum class
-                //goodInput = eAvailableTypesOfVehicles.TryParse(inputFromUser, out vehicleType);
-
-                Dictionary<string, Property> vehicleDictionary = r_GarageManager.InsertNewVehicleToGarage(vehicleType, licenseNumber, ownerVehicleInfo);
-
-                foreach (KeyValuePair<string, Property> key in vehicleDictionary)
-                {
-                    bool good = false;
-                    while(!good)
-                    try
-                    {
-                        Console.WriteLine(key.Value.FormQuestion);
-                        if(key.Value.MemberType.BaseType == typeof(Enum))
-                        {
-                            PrintEnumOptions(key.Value.MemberType);
-                        }
-
-                        inputFromUser = Console.ReadLine();
-                        object parsedUserInput = r_GarageManager.TryParseToType(inputFromUser, key.Value.MemberType);
-                        // if I'm here I didn't throw exception so the type is good
-                        r_GarageManager.addParam(licenseNumber, parsedUserInput, key.Value.MemberName);
-                        good = true;
-                    }
-                    catch(Exception ex)
-                    {
-                        Console.WriteLine("ERROR!!"); 
-                        Console.WriteLine(ex.Message);
-                        Console.WriteLine("Try again...\n"); 
-                    }
-                }
-                Console.WriteLine("Congratulations! you created a new vehicle!\n");
-            }
-            else //Vihcle in the garage
-            {
-                r_GarageManager.ChangeVehicleStatus(licenseNumber, GarageCard.eVehicleState.InRepair);
-            }
-        }
-
-        private eAvailableTypesOfVehicles GetValidInputToTypesOfVehicles()
+        private eAvailableTypesOfVehicles getValidInputToTypesOfVehicles()
         {
             bool isGoodInput = false;
             string inputFromUser;
             eAvailableTypesOfVehicles vehicleType = (eAvailableTypesOfVehicles)1;
             while(!isGoodInput)
             {
+                int enumNumber;
+                
                 inputFromUser = Console.ReadLine();
-                isGoodInput = eAvailableTypesOfVehicles.TryParse(inputFromUser, out vehicleType);
-                if(!isGoodInput)
+                isGoodInput = int.TryParse(inputFromUser, out enumNumber);
+                if(isGoodInput)
+                {
+                    if (!Enum.IsDefined(typeof(eAvailableTypesOfVehicles), enumNumber))
+                    {
+                        Console.WriteLine("The number must be in the given range!");
+                        isGoodInput = false;
+                    }
+                    else
+                    {
+                        isGoodInput = Enum.TryParse(inputFromUser, out vehicleType);
+                    }
+                }
+                else
                 {
                     Console.WriteLine("You need to enter an integer number only from the range!"); //TODO add range
                 }
@@ -361,6 +480,7 @@ namespace Ex03.ConsoleUI
         {
             int index = 1;
             int printedIndex = (int)Enum.GetValues(i_EnumNamesToPrint).GetValue(0);
+
             Console.Write("(");
             foreach (string name in Enum.GetNames(i_EnumNamesToPrint))
             {
@@ -382,18 +502,5 @@ namespace Ex03.ConsoleUI
            Console.WriteLine("Thank you for using our program! BYE.......");
            m_GameLoop = false;
         }
-
-        public enum eMainMenuOptions
-        {
-            Option1 = 1,
-            Option2,
-            Option3,
-            Option4,
-            Option5,
-            Option6,
-            Option7,
-            Option8
-        }
-
     }
 }

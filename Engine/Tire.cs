@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Engine
+﻿namespace Engine
 {
     public struct Tire
     {
@@ -29,7 +27,7 @@ namespace Engine
             }
 
             set {
-                if(value <= r_MaxAirPressureByManufacture && value>0)
+                if(value <= r_MaxAirPressureByManufacture && value > 0)
                 {
                     m_CurrentAirPressure = value;
                 }
@@ -66,7 +64,10 @@ namespace Engine
         {
             if((m_CurrentAirPressure + i_AirPressureToAdd) > r_MaxAirPressureByManufacture)
             {
-                throw new ValueOutOfRangeException(r_MaxAirPressureByManufacture,0,"The given air pressure to add is too much.");
+                throw new ValueOutOfRangeException(
+                    r_MaxAirPressureByManufacture, 0,
+                    $"You tried to inflate the tire with {i_AirPressureToAdd} psi, but the tire already had {m_CurrentAirPressure} psi.\n"
+                    + $"Therefore you passed the maximum air pressure that was set by the manufacture {r_MaxAirPressureByManufacture} psi. You can't add that much!");
             }
 
             m_CurrentAirPressure += i_AirPressureToAdd;

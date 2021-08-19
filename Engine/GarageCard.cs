@@ -5,23 +5,24 @@ namespace Engine
 {
     public class GarageCard
     {
-        public enum eVehicleState{ 
-        InRepair,
-        Fixed,
-        PaidUp
-        }
-
         private readonly string r_OwnerName;
         private readonly string r_OwnerPhoneNumber;
         private eVehicleState m_VehicleCurrentState;
-        private Vehicle m_OwnerVehicle; 
-        
+        private Vehicle m_OwnerVehicle;
+        private const int k_StartIndexOfEnum = 1;
+
+        public enum eVehicleState
+        {
+            InRepair = k_StartIndexOfEnum,
+            Fixed,
+            PaidUp
+        }
+
         public string OwnerName
         {
             get
             {
                 return r_OwnerName;
-
             }
         }
 
@@ -30,7 +31,6 @@ namespace Engine
             get
             {
                 return r_OwnerPhoneNumber;
-
             }
         }
 
@@ -39,13 +39,18 @@ namespace Engine
             get
             {
                 return m_VehicleCurrentState;
-
             }
 
             set
             {
-                m_VehicleCurrentState = value;
-
+                if(Enum.IsDefined(typeof(eVehicleState), value))
+                {
+                    m_VehicleCurrentState = value;
+                }
+                else
+                {
+                    throw new ArgumentException("The given value isn't defined as a vehicle state.");
+                }
             }
         }
 
@@ -54,13 +59,14 @@ namespace Engine
             get
             {
                 return m_OwnerVehicle;
-
             }
 
             set
             {
-                m_OwnerVehicle = value;
-
+                if(value != null)
+                {
+                    m_OwnerVehicle = value;
+                }
             }
         }
 
@@ -78,11 +84,5 @@ namespace Engine
             r_OwnerPhoneNumber = i_OwnerPhoneNumber;
             m_VehicleCurrentState = i_VehicleCurrentState;
         }
-
-        
-
-
-
-        
     }
 }

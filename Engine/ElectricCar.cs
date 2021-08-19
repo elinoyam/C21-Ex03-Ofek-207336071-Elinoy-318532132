@@ -3,9 +3,11 @@ using System.Collections.Generic;
 
 namespace Engine
 {
-    public class ElectricCar : Car, IRechargable
+    public class ElectricCar : Car, IRechargeable
     {
         private readonly ElectricEngine r_CarEngine;
+        private const float k_MaxBatteryTimeInHours = 3.2f;
+
         public ElectricEngine CarEngine
         {
             get
@@ -16,8 +18,7 @@ namespace Engine
 
         public ElectricCar(string i_LicenseNumber, int i_NumberOfTires, float i_TiresMaxAirPressure) : base(i_LicenseNumber, i_NumberOfTires, i_TiresMaxAirPressure)
         {
-            r_CarEngine = new ElectricEngine(3.2f, 0);
-           // AddParams();
+            r_CarEngine = new ElectricEngine(k_MaxBatteryTimeInHours, 0);
         }
 
         public ElectricCar(string i_ModelName, string i_LicenseNumber, float i_EnergyPercentageMeter, List<Tire> i_ListOfTires,
@@ -43,33 +44,26 @@ namespace Engine
 
         public override string ToString()
         {
-            return $"This is a {ModelName} electric car with {LicenseNumber} license plate. " +
-                $" The {ListOfTires.Count} {ListOfTires[0].ManufactureName} tires filled with {ListOfTires[0].CurrentAirPressure} air pressure. " +
-                $"The battery status is: {CarEngine.BatteryTimeRemainingInHours}. ";
+            return $"This is a {ModelName} electric car with {LicenseNumber} license plate.\n" +
+                $"The {ListOfTires.Count} {ListOfTires[0].ManufactureName} tires filled with {ListOfTires[0].CurrentAirPressure} air pressure out of {ListOfTires[0].MaxAirPressure}.\n" +
+                $"The battery status is: {CarEngine.BatteryTimeRemainingInHours} out of {CarEngine.MaxBatteryTimeInHours}.\n";
         }
+
         public override void AddParams()
         {
             base.AddParams();
-            Property property = new Property("Battery remaining hours", "r_CarEngine.m_BatteryTimeRemainingInHours", typeof(float));
-            property.FormQuestion = "Enter the current value of battery of the car:"; 
-            r_VehicleRequiredProperties.Add("r_CarEngine.m_BatteryTimeRemainingInHours", property);
+            Property batteryProperty = new Property("Battery remaining hours", "r_CarEngine.m_BatteryTimeRemainingInHours", typeof(float));
+
+            batteryProperty.FormQuestion = "Enter the current value of battery of the car:"; 
+            r_VehicleRequiredPropertiesDictionary.Add("r_CarEngine.m_BatteryTimeRemainingInHours", batteryProperty);
         }
-
-        public override List<string> ListOfQuestions()
-        {
-            List<string> listOfQuestions = base.ListOfQuestions();
-
-            listOfQuestions.AddRange(r_CarEngine.ListOfQuestions());
-
-            return listOfQuestions;
-        }
-
+        
         internal override void UpdateParameter(object i_ParsedUserInput, string i_MemberName)
         {
             switch (i_MemberName)
             {
-                case "r_CarEngine.m_BatteryTimeRemainingInHours": //m_CurrentFuelCapacity
-                    r_CarEngine.BatteryTimeRemainingInHours = (float)i_ParsedUserInput; //TODO not readonly anymore think how to do full engine
+                case "r_CarEngine.m_BatteryTimeRemainingInHours": 
+                    r_CarEngine.BatteryTimeRemainingInHours = (float)i_ParsedUserInput;
                     EnergyPercentageMeter = r_CarEngine.BatteryTimeRemainingInHours / r_CarEngine.MaxBatteryTimeInHours;
                     break;
                 default:
