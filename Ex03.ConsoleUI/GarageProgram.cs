@@ -100,6 +100,7 @@ namespace Ex03.ConsoleUI
                 if (r_GarageManager.IsVehicleInGarage(licenseNumber))
                 {
                     r_GarageManager.InflateTiresAirToMaximum(licenseNumber);
+                    Console.WriteLine("The vehicle tires has been inflated to maximum air pressure.");
                 }
                 else
                 {
@@ -230,7 +231,7 @@ namespace Ex03.ConsoleUI
 
         public void PrintMainMenu()
         {
-            string mainMenuOptions = "Please select one of the following options (a number between 1-7):\n"
+            string mainMenuOptions = "\nPlease select one of the following options (a number between 1-7):\n"
                                      + "1 - Insert a new vehicle into the garage.\n"
                                      + "2 - Display all the vehicles currently in the garage. (with or without filter by their status)\n"
                                      + "3 - Change a vehicle's status.\n"
@@ -367,7 +368,7 @@ namespace Ex03.ConsoleUI
                 {
                     Console.Write(",");
                 }
-                printedIndex = (int)Enum.GetValues(i_EnumNamesToPrint).GetValue(index);
+                printedIndex = (int)Enum.GetValues(i_EnumNamesToPrint).GetValue(index-1);
                 Console.Write($" {printedIndex} - {name}");
                 ++index;
                 ++printedIndex;

@@ -71,7 +71,7 @@ namespace Engine
         {
             base.AddParams();
             Property propertyPermission = new Property("Permission to carry dangerous materials", "m_IsCarryingDangerousMaterials", typeof(bool));
-            propertyPermission.FormQuestion = "Are you allowed to carry dangerous materials? (enter \'true\' or \' false \')";
+            propertyPermission.FormQuestion = "Are you allowed to carry dangerous materials? (enter 1 - true or 0 - false)";
             r_VehicleRequiredProperties.Add("m_IsCarryingDangerousMaterials", propertyPermission);
             Property propertyMaxCarryWeight = new Property("Truck maximum carry weight", "m_MaxCarryingWeight", typeof(float));
             propertyMaxCarryWeight.FormQuestion = "Enter your maximum carry weight:";
@@ -101,7 +101,7 @@ namespace Engine
                     m_MaxCarryingWeight = (float)i_ParsedUserInput;
                     break;
                 case "r_TruckFuelEngine.m_CurrentFuelCapacity": //m_CurrentFuelCapacity
-                    r_TruckFuelEngine.CurrentFuelCapacity = (int)i_ParsedUserInput; //TODO not readonly anymore think how to do full engine
+                    r_TruckFuelEngine.CurrentFuelCapacity = (float)i_ParsedUserInput; //TODO not readonly anymore think how to do full engine
                     EnergyPercentageMeter = r_TruckFuelEngine.CurrentFuelCapacity / r_TruckFuelEngine.MaxFuelCapacity;
                     break;
                 default:
