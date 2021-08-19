@@ -1,6 +1,7 @@
 ﻿using Engine;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using static Engine.VehicleFactory;
 
 namespace Ex03.ConsoleUI
@@ -234,33 +235,64 @@ namespace Ex03.ConsoleUI
             Console.WriteLine(mainMenuOptions);
         }
 
+        public string GetValidInput(bool i_NeedToBeNumber)
+        {
+            string input = null;
+            bool goodInput = false;
+
+            while(!goodInput)
+            {
+                input = Console.ReadLine();
+                if(i_NeedToBeNumber)
+                {
+                    goodInput = ((input.All(c => char.IsDigit(c) || c =='+' || c =='-') && !string.IsNullOrEmpty(input)));
+                    if (!goodInput)
+                    {
+                        Console.WriteLine("Try again. need to contain only digits or + or -");
+                    }
+                }
+                else
+                {
+                    goodInput = !string.IsNullOrEmpty(input);
+                    if (!goodInput)
+                    {
+                        Console.WriteLine("Try again. can't be an empty line");
+                    }
+                }
+
+                
+            }
+
+            return input;
+        }
+
         public void InsertNewVehicleToGarage()
         {
             bool goodInput;
+            bool needsToBeNumber = false;
             string licenseNumber, inputFromUser;
-            eAvailableTypesOfVehicles vehicleType; //TODO can i use it without the class name before?
+            eAvailableTypesOfVehicles vehicleType; 
             List<string> ownerVehicleInfo = new List<string>(); //Garage ticket
-            List<string> commonVehicleInfo = new List<string>(); //Vehicle
-            List<string> commonTypeOfVehicleInfo = new List<string>(); //Car / Motorcycle
-            List<string> specificTypeOfVehicleInfo = new List<string>(); // engine / fuel (car / Motorcycle)
 
             Console.WriteLine("You chose option 1 to Insert a vehicle to the garage!");
             //1- string license number (plate?)
             Console.WriteLine("Please write the license number: ");
-            licenseNumber = Console.ReadLine();
+            needsToBeNumber = false;
+            licenseNumber = GetValidInput(needsToBeNumber);
 
             if (!r_GarageManager.IsVehicleInGarage(licenseNumber))
             {
-                commonVehicleInfo.Add(licenseNumber); //licenseNumber
-
                 //2- string owner name
                 Console.WriteLine("Please write the owner name: ");
-                inputFromUser = Console.ReadLine();
+                needsToBeNumber = false;
+                inputFromUser = GetValidInput(needsToBeNumber);
+                //inputFromUser = Console.ReadLine();
                 ownerVehicleInfo.Add(inputFromUser);
 
                 //3- string owner phone number
                 Console.WriteLine("Please write the owner phone number: ");
-                inputFromUser = Console.ReadLine();
+                needsToBeNumber = true;
+                inputFromUser = GetValidInput(needsToBeNumber);
                 ownerVehicleInfo.Add(inputFromUser);
 
                 //4- enum type of vehicle -- look at 9

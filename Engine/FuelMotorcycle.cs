@@ -62,7 +62,7 @@ namespace Engine
             base.AddParams();
             Property property = new Property("Current amount of fuel", "r_MotorcycleEngine.m_CurrentFuelCapacity", typeof(float));
             property.FormQuestion = "Enter the current amount of fuel of the motorcycle:";
-            string name = r_MotorcycleEngine.GetType().Name; //TODO fine if it return r_MotorcycleEngine
+            //string name = r_MotorcycleEngine.GetType().Name; //TODO fine if it return r_MotorcycleEngine
             r_VehicleRequiredProperties.Add("r_MotorcycleEngine.m_CurrentFuelCapacity", property);
         }
 
